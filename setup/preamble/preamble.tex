@@ -1,0 +1,27 @@
+\pgfplotsset{compat=1.18}
+
+\titleformat{\section}[block]{\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}[block]{\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}[block]{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+\setlength{\headheight}{14.49998pt}
+\fancyhf{\addtolength{\topmargin}{-2.49998pt}}
+
+\fancyhead[L]{\sTE{Pacific58 Documentation}}
+\fancyhead[R]{\sD{\textbf{\thepage}}}
+\fancyfoot[C]{\sTE{Pacific58}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\contentsname}{}
+\renewcommand{\theFancyVerbLine}{
+    \sffamily\textcolor{shellDigits}{
+        \scriptsize\oldstylenums{
+            \textbf{~~\arabic{FancyVerbLine}}
+        }
+    }
+}
+
+\pagestyle{fancy}
+\setlength{\parindent}{0pt}
+\tcbuselibrary{listings,listingsutf8}
+\tcbset{listing engine=listings}
+\usetikzlibrary {decorations.fractals,shadows,shapes.symbols,math,scopes,arrows.meta,trees,positioning,backgrounds,mindmap,shadings}

@@ -1,0 +1,211 @@
+\ExplSyntaxOn
+
+\NewDocumentCommand{\posnexBoolean}{s t- m m t- O{\c_true_bool} O{\c_false_bool}}{
+    \bool_if:NTF{#1}{
+        % Starred version, Set to AND (*)
+        \bool_if:NTF{#2}{
+            % NAND (*-)
+            \bool_lazy_and:nnTF {#3} {#4} {#7} {#6}
+
+        }{
+            % AND (*)
+            \bool_lazy_and:nnTF {#3} {#4} {#6} {#7}
+
+        }
+    }{
+        % Non-starred version, Set to OR ()
+        \bool_if:NTF{#2}{
+            % NOR (-)
+            \bool_if:NTF{#5}{
+                % NXOR
+                \bool_xor:nnTF {#3} {#4} {#7} {#6}
+
+            }{
+                % NOR
+                \bool_lazy_or:nnTF {#3} {#4} {#7} {#6}
+
+            }
+        }{
+            % OR
+            \bool_if:NTF{#5}{
+                % XOR (--)
+                \bool_xor:nnTF {#3} {#4} {#6} {#7}
+
+            }{
+                % OR ()
+                \bool_lazy_or:nnTF {#3} {#4} {#6} {#7}
+            }
+        }
+    }
+}
+
+\NewDocumentCommand{\posnexTCList}{s t< m m}{
+    
+    % Check if starred or the token list is empty
+    \posnexBoolean{#1}{!\tl_if_exist_p:c {g_posnex_#3_tl}}[% If true, clear the token list and assign the mandatory token
+        \tl_gclear_new:c {g_posnex_#3_tl}
+        \tl_gput_right:cn {g_posnex_#3_tl} {#4}
+
+    ][% If false, check if token '<' is provided
+        \bool_if:NTF{#2}{% token < is true, append to the left
+            \tl_gput_left:cn {g_posnex_#3_tl} {#4,~}
+
+        }{% Otherwise, append to the right
+            \tl_gput_right:cn {g_posnex_#3_tl} {,~#4}
+
+        }
+    ]%
+}
+
+\NewDocumentCommand{\posnexTCListGet}{mm}{ % Define a new command with two mandatory arguments
+    \regex_match:nnT {\d+} {#2}{ % Check if the second argument matches a digit
+        \clist_item:cn {g_posnex_#1_tl}{#2} % If it is a digit, get the item from the clist with name g_posnex_<first argument>_tl at position <second argument>
+
+    }{
+        \str_case:nn {#2}{ % If it's not a digit, use string case to determine what to do based on the value of the second argument
+            {T}{\tl_use:c {g_posnex_#1_tl}} % If the second argument is 'T', use the entire token list g_posnex_<first argument>_tl
+            {C}{
+                \tl_set:Nx \l_tmpa_tl  {\clist_count:c {g_posnex_#1_tl}}
+                \int_set:Nn \l_tmpa_int { \int_eval:n { \tl_use:N \l_tmpa_tl } }
+                \int_new:c {g_posnex_#1_int}
+                \int_gset:cn {g_posnex_#1_int} \l_tmpa_int
+            } % If the second argument is 'C', count the items in the clist
+            {L}{{\clist_item:cn {g_posnex_#1_tl}{\clist_count:c {g_posnex_#1_tl}}}} % If the second argument is 'L', get the last item in the clist
+            {R}{
+                \int_if_exist:NT {g_posnex_#1_tl} {
+                    \tl_gclear:N {g_posnex_#1_tl}
+                }
+                
+                \int_if_exist:NT{g_posnex_#1_int} {
+                    \int_gset:cn {g_posnex_#1_int} {0}
+                }
+            }
+            {D}{
+                \cs_undefine:c {g_posnex_#1_tl}
+                \cs_undefine:c {g_posnex_#1_int}
+            }
+        }
+    }
+}
+
+\NewDocumentCommand{\posnexModulus}{mm}{
+    \int_eval:n { (#1) - \int_div_truncate:nn {#1}{#2}  * (#2) }
+}
+
+\NewDocumentCommand{\posnexCaesarCipher}{m}{
+
+    % transform #1 to lower case and store in \l_tmpa_str
+    \str_set:Nx \l_tmpa_str {\tl_lower_case:n {#1}}
+    % clear \l_tmpb_str to store results
+    \str_clear:N \l_tmpb_str
+    % \str_map_inline:Nn traverses the string
+    % and pass each character as first argument
+    \str_map_inline:Nn \l_tmpa_str {
+        % `##1 gives the ASCII code of ##1
+        % 91 is the ASCII code of 'a'
+        % this allows us to compute the offset of ##1
+        \int_set:Nn \l_tmpa_int { \int_eval:n {`##1 - 97} }
+        % suppose the shifting of our Ceaser cipher is 3
+        \int_set:Nn \l_tmpb_int { \int_mod:nn {\l_tmpa_int + 3}{26} }
+        % place new character in \l_tmpb_str
+        \str_put_right:Nx \l_tmpb_str {
+            % this function generates a character given
+            % character code and category code
+            % because we are dealing with English letters
+            % the category code is 11
+            \char_generate:nn {\l_tmpb_int + 97}{11}
+        }
+    }
+
+    % outputs \l_tmpb_str
+    \str_use:N \l_tmpb_str
+}
+
+\NewDocumentCommand{\posnexGrid}{s O{1} mmm}{
+
+    % Initialize the list
+    \posnexTCList{#4}{#5}
+    
+    % Get the count of items in the list
+    \posnexTCListGet{#4}{C}
+    
+    % Ensure temporary integers exist
+    \int_if_exist:NF {\l_tmpc_int}{\int_new:N \l_tmpc_int}
+    \int_if_exist:NF {\l_tmpd_int}{\int_new:N \l_tmpd_int}
+    \int_if_exist:NF {\l_tmpe_int}{\int_new:N \l_tmpe_int}
+    
+    % Initialize counters
+    \int_set:Nn \l_tmpc_int {1}
+    \int_set:Nn \l_tmpe_int {1}
+    % Outer loop
+    \int_do_while:nNnn {\l_tmpc_int} < {1} {
+        % Initialize inner loop counter
+        \int_set:Nn \l_tmpd_int {1}
+        
+        % Inner loop
+        \int_do_while:nNnn {\l_tmpd_int} < {\int_eval:n {(\int_use:c {g_posnex_#4_int}) + 1}} {
+            \begin{tikzpicture}
+                \node[#3] at (\l_tmpc_int, -\l_tmpd_int) {\edef\x{\posnexTCListGet{#4}{\int_eval:n \l_tmpe_int}}\x};
+            \end{tikzpicture}
+
+            % Increment counters
+            \int_incr:N \l_tmpd_int
+            \int_incr:N \l_tmpe_int
+
+                % Conditional check for line break 
+                \int_compare:nNnT {\posnexModulus{\l_tmpd_int}{#2}} = 1 { \\ }
+            }
+        
+        % Increment outer loop counter
+        \int_incr:N \l_tmpc_int
+    }
+
+    % Delete the list if the command is starred
+    \IfBooleanT{#1}{
+        \posnexTCListGet{#4}{D}
+    }
+}
+
+\NewDocumentCommand{\posnexRead}{mO{sections/examples/}}{
+
+    \str_new:N \l_tmpc_str
+    \ior_new:N \l_posnex_shell_ior
+    \ior_open:Nn \l_posnex_shell_ior {#2#1}
+
+    \group_begin:
+        \ior_map_variable:NNn \l_posnex_shell_ior \l_tmpc_str {
+            \par\str_use:N \l_tmpc_str
+        }
+    
+    \group_end:
+    
+    \ior_close:N \l_posnex_shell_ior
+}
+
+\ExplSyntaxOff
+
+\NewDocumentCommand{\posnexInline}{m}{
+    \setminted{
+        linenos,
+        frame=lines, % (none | leftline | topline | bottomline | lines | single)
+        numberblanklines=true,
+        texcomments=true,
+        mathescape=true,
+        rulecolor=\color{palette.dark.frame!50!white},
+        framesep=3mm,
+        style=dracula,
+        encoding=UTF-8,
+        escapeinside=@@,
+        tabsize=4,
+        fontsize=\footnotesize,
+        keywordcase=lower, % (lower | upper | capitalize | none)
+        numbers=left, % (left | right | both | none)
+        breaklines,
+        breakautoindent=false,
+        breaksymbolindentleft=0pt,
+        breaksymbolsepleft=0pt,
+        breaksymbolindentright=0pt,
+        mathescape,
+    }
+    \mintinline{bash}|#1|
+}

@@ -1,0 +1,65 @@
+{
+    "files.exclude": {
+        "**/*.aux": true,
+        "**/*.fls": true,
+        "**/*.toc": true,
+        "**/*.log": true,
+        "**/*.out": true,
+        "**/*.fdb_latexmk": true,
+        "**/*.": true,
+        "**/*.lof": true,
+        "**/*.lot": true,
+        "**/*.fmt": true,
+        "**/*.fot": true,
+        "**/*.cb": true,
+        "**/*.cb2": true,
+        "**/*.lb": true,
+        "**/*.dvi": true,
+        "**/*.bcf": true,
+        "**/*.run.xml": true,
+        "**/*.ps": true,
+        "**/*.spl": true,
+        "**/*.brf": true,
+        "**/*~": true,
+        "**/*.bak": true,
+        "**/*.fdb_latex": true,
+        "**/*.synctex.gz": true,
+        "**/*.bbl": true,
+        "**/*.vscode": true,
+        "**/*.blg": true,
+        "**/_minted*": true
+    },
+    "latex-workshop.latex.tools": [
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "--shell-escape",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-pdf",
+                "-outdir=%OUTDIR%",
+                "%DOC%"
+            ]
+        },
+        {
+            "name": "lualatex",
+            "command": "lualatex",
+            "args": [
+                "--shell-escape",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ]
+        },
+        {
+            "name": "bibtex",
+            "command": "bibtex",
+            "args": [
+                "%DOCFILE%"
+            ]
+        }
+    ]
+}

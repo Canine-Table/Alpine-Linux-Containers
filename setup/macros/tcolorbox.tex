@@ -1,0 +1,138 @@
+\newtcolorbox{baseBoxOne}[3][]{
+    enhanced,
+    colback=palette.#3.back,
+    colframe=palette.#3.frame,
+    fonttitle=\bfseries,
+    colbacktitle=palette.#3.title,
+    coltext=palette.#3.text,
+    attach boxed title to top center={
+        yshift=-0.25mm-\tcboxedtitleheight/2,
+        yshifttext=2mm-\tcboxedtitleheight/2%
+    },%
+    boxed title style={
+        boxrule=0.5mm,
+        frame code={
+            \path[tcb fill frame] ([xshift=-4mm]frame.west)
+            -- (frame.north west) -- (frame.north east) -- ([xshift=4mm]frame.east)
+            -- (frame.south east) -- (frame.south west) -- cycle; },
+            interior code={ \path[tcb fill interior] ([xshift=-2mm]interior.west)
+            -- (interior.north west) -- (interior.north east)
+            -- ([xshift=2mm]interior.east) -- (interior.south east) -- (interior.south west)
+            -- cycle;%
+        }%
+    },
+    title={#2},
+    #1
+}
+
+\newtcolorbox{baseBoxTwo}[3][]{
+    enhanced,
+    colback=palette.#3.back,
+    colframe=palette.#3.frame,
+    fonttitle=\bfseries,
+    colbacktitle=palette.#3.title,
+    coltext=palette.#3.text,
+    attach boxed title to top center={yshift=-2mm},
+    title=#2,
+    #1
+}
+
+\newtcolorbox{baseBoxThree}[3][]{
+    enhanced,
+    before skip=2mm,
+    after skip=2mm,
+    boxrule=0.2mm,
+    right=5mm,
+    left=5mm,
+    colback=palette.#3.back!30!palette.dark.back,
+    colframe=palette.#3.frame,
+    fonttitle=\bfseries,
+    colbacktitle=palette.#3.title!70!palette.dark.back,
+    coltext=palette.#3.text,
+    attach boxed title to top left={xshift=1cm,yshift*=1mm-\tcboxedtitleheight},
+    boxed title style={
+        frame code={
+            \path[fill=tcbcolback!30!black]
+            ([yshift=-1mm,xshift=-1mm]frame.north west)
+            arc[start angle=0,end angle=180,radius=1mm]
+            ([yshift=-1mm,xshift=1mm]frame.north east)
+            arc[start angle=180,end angle=0,radius=1mm];
+            \path[left color=tcbcolback!60!black,right color=tcbcolback!60!black,
+            middle color=tcbcolback!80!black]
+            ([xshift=-2mm]frame.north west) -- ([xshift=2mm]frame.north east)
+            [rounded corners=1mm]-- ([xshift=1mm,yshift=-1mm]frame.north east)
+            -- (frame.south east) -- (frame.south west)
+            -- ([xshift=-1mm,yshift=-1mm]frame.north west)
+            [sharp corners]-- cycle;%
+        },%
+        interior engine=empty,%
+    },%
+    title=#2,
+    #1
+}
+
+\newtcolorbox{baseBoxFour}[3][]{
+    enhanced,
+    colback=palette.#3.back,
+    colframe=palette.#3.frame,
+    fonttitle=\bfseries,
+    colbacktitle=palette.#3.title,
+    coltext=palette.#3.text,
+    attach boxed title to top center={yshift=-2mm},
+    title={#2},
+    #1
+}
+
+\newtcolorbox{baseBoxFive}[3][]{
+    enhanced,
+    colback=palette.#3.back,
+    colframe=palette.#3.frame,
+    fonttitle=\bfseries,
+    colbacktitle=palette.#3.title,
+    coltext=palette.#3.text,
+    attach boxed title to top center={yshift=-2mm},
+    title={#2},
+    #1
+}
+
+\newenvironment{posnexItemize}{%
+    \begin{itemize}
+}{%
+    \end{itemize}
+}
+
+\tcolorboxenvironment{posnexItemize}{
+    blanker,
+    coltext=white,
+    borderline west={2.3mm}{0pt}{palette.dark.frame,}
+}
+
+\newtcbox{\baseTcBoxOne}[1]{
+    on line,
+    colback=palette.#1.back,
+    colframe=palette.#1.frame,
+    coltext=palette.#1.text,
+    arc=7pt,
+    before upper={\rule[-3pt]{0pt}{10pt}},
+    boxrule=1pt,
+    boxsep=0pt,
+    left=6pt,
+    right=6pt,
+    top=2pt,
+    bottom=2pt,
+}
+
+\newtcbox{\baseTcBoxTwo}[1]{
+    on line,
+    colback=palette.#1.back!30!palette.dark.back,
+    colframe=palette.#1.frame,
+    coltext=palette.#1.text,
+    arc=7pt,
+    before upper={\rule[-3pt]{0pt}{10pt}},
+    boxrule=1pt,
+    boxsep=0pt,
+    left=6pt,
+    right=6pt,
+    top=2pt,
+    bottom=2pt,
+}
