@@ -1,0 +1,172 @@
+\phantomsection{}
+\label{Networking}
+\addcontentsline{toc}{subsection}{Networking}
+\begin{baseBoxThree}{Networking}{dark}
+
+    \phantomsection{}
+    \label{Networking Files}
+    \addcontentsline{toc}{subsubsection}{Networking Files}
+    \begin{baseBoxThree}{Networking Files}{info}
+        \begin{posnexItemize}
+            \item[\sA] \sE{/etc/network/interfaces}: The main configuration file for network interfaces. It defines how each network interface is set up (e.g., static IP, DHCP).
+            \item[\sA] \sE{/etc/network/interfaces.d}: A directory for additional network interface configurations. Any file in this directory will be included by the main interfaces file. This is useful for organizing configurations separately. 
+            \item[\sA] \sE{/etc/network/if-down.d}: Scripts in this directory are executed when an interface is brought down. This can be used for cleaning up or logging. 
+            \item[\sA] \sE{/etc/network/if-post-down.d}: Similar to if-down.d, but these scripts run after the interface has been fully brought down. 
+            \item[\sA] \sE{/etc/network/if-post-up.d}: Scripts here are run after an interface is brought up. Useful for post-configuration tasks like setting additional routes or updating DNS.
+            \item[\sA] \sE{/etc/network/if-pre-down.d}: Scripts executed before an interface is brought down. Can be used for pre-shutdown checks or preparations.
+            \item[\sA] \sE{/etc/network/if-pre-up.d}: Scripts that run before an interface is brought up. Useful for preliminary checks or setting up necessary conditions before the interface is up.
+            \item[\sA] \sE{/etc/network/if-up.d}: Scripts executed when an interface is brought up. These can perform tasks such as updating network settings or notifying other services.
+        \end{posnexItemize}
+    \end{baseBoxThree}
+    \smallskip
+    \phantomsection{}
+    \label{Scripts in Action}
+    \addcontentsline{toc}{subsubsection}{Scripts in Action}
+    \begin{baseBoxThree}{Scenario}{dark}
+        \begin{posnexItemize}
+            \item[\sA] \sE{lo}: The loopback interface.
+            \item[\sA] \sE{eth0}: Will be assigned a static IP address.
+            \item[\sA] \sE{eth1}: Will be configured to obtain an IP address via DHCP.
+        \end{posnexItemize}        
+    \end{baseBoxThree}
+\end{baseBoxThree}
+\begin{baseBoxThree}{\fU{Networking}}{dark}
+    \smallskip
+    \begin{baseBoxThree}{/etc/network/if-pre-up.d}{dark}
+        \begin{posnex}
+#!/bin/ash
+# /etc/network/if-pre-up.d/rename-interfaces
+# This script renames network interfaces before they are brought
+ip link show eth0 1> /dev/null 2>&1 && ip link set dev eth0 name eth0_static
+ip link show eth1 1> /dev/null 2>&1 && ip link set dev eth1 name eth1_dhcp
+        \end{posnex}
+    \end{baseBoxThree}
+    \smallskip
+    \begin{baseBoxThree}{/etc/network/if-up.d}{dark}
+        \begin{posnex}
+#!/bin/ash
+# /etc/network/if-up.d/add-route
+# This script adds a route after the interface is brought up
+ip route add 192.168.2.0/24 via 192.168.1.1 dev eth0_static
+        \end{posnex}
+    \end{baseBoxThree}
+    \smallskip
+    \begin{baseBoxThree}{/etc/network/interfaces}{dark}
+        \begin{posnex}
+#!/bin/ash
+# /etc/network/interfaces
+# Main network interfaces configuration file
+
+# Loopback interface
+auto lo
+
+# DHCP configuration for eth1_dhcp
+auto eth1_dhcp
+iface eth1_dhcp inet dhcp
+        \end{posnex}
+    \end{baseBoxThree}
+    \smallskip
+\end{baseBoxThree}
+
+\begin{baseBoxThree}{\fU{Networking}}{dark}
+    \smallskip
+    \begin{baseBoxThree}{/etc/network/interfaces.d}{dark}
+        \begin{posnex}
+#!/bin/ash
+# /etc/network/interfaces.d/eth0_static
+# Static IP configuration for eth0_static
+auto eth0_static
+iface eth0_static inet static
+    address 192.168.1.100
+    netmask 255.255.255.0
+    gateway 192.168.1.1
+    dns-nameservers 8.8.8.8 8.8.4.4
+        \end{posnex}
+    \end{baseBoxThree}
+    \smallskip
+    \begin{baseBoxThree}{/etc/network/if-pre-down.d}{dark}
+        \begin{posnex}
+#!/bin/ash
+# /etc/network/if-pre-down.d/pre-down-check
+# Pre-down check script
+# Perform necessary actions before the interface is brought down
+
+# Example: Logging the interface down event
+logger "Bringing down interface: ${IFACE}"
+        \end{posnex}
+    \end{baseBoxThree}
+    \smallskip
+    \begin{baseBoxThree}{/etc/network/if-down.d}{dark}
+        \begin{posnex}
+#!/bin/ash
+# /etc/network/if-down.d/cleanup-routes
+ip route del 192.168.2.0/24 via 192.168.1.1 dev eth0_static
+        \end{posnex}
+    \end{baseBoxThree}
+    \smallskip
+\end{baseBoxThree}
+
+\begin{baseBoxThree}{\fU{Networking}}{dark}
+    \bigskip
+    \sTE{Alpine Linux VM}: Use this setup if you are working with a full virtual machine (VM) environment. This is ideal for scenarios requiring a complete OS with persistent storage, system-level configurations, and traditional init systems like OpenRC.
+    \bigskip
+    \begin{baseBoxThree}{\gAL{width=1cm}}{dark}
+        \begin{posnex}
+# Restart the networking service to apply the configurations
+service networking restart
+
+# Check the status of the networking service
+service networking status
+        \end{posnex}
+    \end{baseBoxThree}
+    \bigskip
+    \sTE{Docker Container}: Use this setup if you are running lightweight, isolated applications in containers. This approach is perfect for microservices, testing, and deployment scenarios where quick startup times and efficient resource usage are critical.
+    \bigskip
+    \begin{baseBoxThree}{\gDK{width=1cm}}{dark}
+        \begin{posnex}
+# Inside the container: Install necessary packages
+apk update && apk upgrade
+apk add openrc iproute2
+
+# Create the /run/openrc directory if it doesn't exist and create the softlevel file to bypass OpenRC warnings
+# This is required because Docker containers do not typically have an init system like OpenRC by default.
+# Without this, you may encounter warnings when trying to manage services with OpenRC.
+mkdir -p /run/openrc && touch /run/openrc/softlevel
+
+# Inside the container: Enable and start the networking service
+rc-update add networking default
+rc-service networking start
+
+# Inside the container: Verify the networking service status
+rc-service networking status
+        \end{posnex}
+    \end{baseBoxThree}
+\end{baseBoxThree}
+
+\begin{baseBoxThree}{\fU{Networking}}{dark}
+    \bigskip
+    \sTE{Conclusion}: In this section, we delved into the networking configurations and scripts of Alpine Linux. Here's a summary of what we covered:
+    \bigskip
+    \phantomsection{}
+    \label{Scenario Wrap Up}
+    \addcontentsline{toc}{subsubsection}{Scenario Wrap Up}
+    \begin{baseBoxThree}{Scenario Wrap Up}{dark}
+        \begin{posnexItemize}
+            \item[\sA] \sE{Interface Setup}: Configured lo (the loopback interface), eth0 with a static IP address, and eth1 to obtain an IP address via DHCP.
+            \item[\sA] \sE{Scripts}: Implemented scripts to rename interfaces before they are brought up and add routes after the interfaces are up.
+            \item[\sA] \sE{Cleanup}: Provided cleanup scripts for routes before interfaces are brought down.
+        \end{posnexItemize}
+    \end{baseBoxThree}
+    \smallskip
+    \begin{baseBoxThree}{What We Did}{dark}
+        \begin{posnexItemize}
+            \item[\sA] \sE{IP Configurations}: Demonstrated configurations for static and dynamic IP addresses.
+            \item[\sA] \sE{Script Examples}: Included example scripts to handle network interface changes, ensuring proper setup, cleanup, and logging.
+        \end{posnexItemize}
+    \end{baseBoxThree}
+    \smallskip
+    \begin{baseBoxThree}{Wrap Up}{dark}
+        By following these examples, you should have a solid foundation for managing network interfaces in Alpine Linux.
+        This structured approach helps keep your network setup organized and efficient.
+    \end{baseBoxThree}
+\end{baseBoxThree}
