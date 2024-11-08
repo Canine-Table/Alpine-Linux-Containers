@@ -1,0 +1,30 @@
+\documentclass[a4paper,12pt]{article}
+
+% Setup Preamble and Packages
+\input{setup/preamble/include.tex}
+
+% Macro Definitions
+\input{setup/macros/include.tex}
+
+\begin{document}
+    \label{top}
+    \title{
+        \gAL{width=0.5\textwidth}\\[1cm]
+        \textbf{Pacific58}
+    }
+
+    \author{Jean Paul}
+    \date{\today}
+    \maketitle
+    \newpage
+
+    \label{contents}
+    \begin{baseBoxOne}{\Large\sTE{Contents}}{dark}
+        \tableofcontents
+        \bigskip
+    \end{baseBoxOne}
+    \newpage
+    \subfile{sections/00-introduction.tex}
+    \subfile{sections/01-features.tex}
+    \subfile{sections/02-deployment.tex}
+\end{document}

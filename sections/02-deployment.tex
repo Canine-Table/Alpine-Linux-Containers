@@ -1,0 +1,50 @@
+\section{Deployment}
+\phantomsection{}
+\label{Prerequisites}
+\addcontentsline{toc}{subsection}{Prerequisites}
+\begin{baseBoxThree}{Prerequisites}{dark}
+    Before we begin, ensure you have an up-to-date version of \href{https://docs.docker.com/get-docker/}{Docker} installed.
+\end{baseBoxThree}
+
+\phantomsection{}
+\label{Deployment Script}
+\addcontentsline{toc}{subsection}{Deployment Script}
+\begin{baseBoxThree}{Deployment Script}{dark}
+    \bigskip
+    To illustrate the deployment process, below is an example script that demonstrates how to launch an Alpine Linux container with unique identifiers and network configuration.
+    This script generates a unique prefix for the container, runs it in detached mode with the host's network stack, and assigns custom labels, hostname, and domain name. It also keeps the container running persistently, allowing for interactive management via Docker's exec command.
+    \bigskip
+
+    \phantomsection{}
+    \label{Note for Windows Users}
+    \addcontentsline{toc}{subsubsection}{Note for Windows Users}
+    \begin{baseBoxThree}{Note for Windows Users}{info}
+        \begin{posnexItemize}
+            \item[\sA] \sE{Cygwin Installation}: Visit the \href{https://www.cygwin.com/}{Cygwin website} to download and install Cygwin.
+            \item[\sA] \sE{POSIX Environment}: Cygwin provides a robust POSIX-compatible environment, enabling you to run and manage the examples seamlessly on Windows.
+        \end{posnexItemize}
+    \end{baseBoxThree}
+    \bigskip        
+    \begin{baseBoxThree}{\gDK{width=1cm}}{dark}
+        \begin{posnex}
+(
+    CONTAINER_ID="$(
+        UNIQUE="$(cat /dev/urandom | tr -dc [:alnum:] | head -c 16)"
+        docker container run --detach \
+            --network=bridge \
+            --name example_${UNIQUE} \
+            --label ${UNIQUE} \
+            --hostname ${UNIQUE}.example.lab \
+            --domainname example.lab \
+            --publish-all \
+            alpine:latest sh -c "while :; do sleep 1; done"
+    )" && {
+        docker container exec --interactive --tty ${CONTAINER_ID} ash
+    }
+)
+        \end{posnex}
+    \end{baseBoxThree}
+    \bigskip
+    Throughout this documentation, we will refer to the provided example script as a foundation for various deployment scenarios and configurations. This script demonstrates best practices for container deployment, including unique naming, network configuration, and persistent container operation. Please ensure you are familiar with this example, as it will serve as a reference point for understanding and implementing the discussed concepts.
+    \smallskip
+\end{baseBoxThree}
