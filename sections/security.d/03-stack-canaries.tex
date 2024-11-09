@@ -17,23 +17,30 @@
         \smallskip
     \end{baseBoxThree}
     \smallskip
+    \phantomsection{}
+    \label{Types of Canaries}
     \begin{baseBoxThree}{Types}{dark}
         \smallskip
         \begin{posnexItemize}
-            \item[\sA] \sE{Terminator Canaries}: These canaries contain null bytes, carriage returns, and newline characters, making them difficult to overwrite with standard string functions.
+            \item[\sA] \fD{Terminator Canaries}: These canaries contain null bytes, carriage returns, and newline characters, making them difficult to overwrite with standard string functions.
             \item[\sA] \sE{Random Canaries}: These canaries are randomly generated at program startup, making them unpredictable and harder for an attacker to guess.
             \item[\sA] \sE{Guard Pages}: These canaries use memory pages marked as non-readable or non-writable to detect stack overflows.
         \end{posnexItemize}
-        \smallskip
+        \bigskip
         Stack canaries are an important part of modern software security practices, helping to protect against certain types of buffer overflow attacks.
         \smallskip
     \end{baseBoxThree}
+    \bigskip
+    The script below demonstrates how to create and run two C programs—one with stack canaries enabled and one without.
+    The programs are designed to illustrate how stack canaries can detect and prevent buffer overflow attacks.
     \smallskip
 \end{baseBoxThree}
 
 \begin{baseBoxThree}{\fU{Stack Canaries}}{dark}
     \smallskip
-    \begin{baseBoxThree}{Example}{dark}
+    \phantomsection{}
+    \label{Terminator Canaries}
+    \begin{baseBoxThree}{\fUD{Types of Canaries}{Example: Terminator Canary}}{dark}
         \begin{posnex}
 apk update && apk upgrade
 apk add gcc build-base
@@ -85,7 +92,8 @@ gcc -o example_with_canary vulnerable_example.c
     \smallskip
     \begin{baseBoxThree}{Note}{info}
         \smallskip
-        This script demonstrates how to create and run two C programs—one with stack canaries enabled and one without. The programs are designed to illustrate how stack canaries can detect and prevent buffer overflow attacks. Because Alpine Linux is highly secure, the program without stack canaries should result in a core dump when a buffer overflow occurs.
+            Since this is Alpine, you should expect the program without stack canaries to result in a core dump when a buffer overflow occurs.
+            This demonstrates the robustness of Alpine's handling of such vulnerabilities.
         \smallskip
     \end{baseBoxThree}
     \smallskip
