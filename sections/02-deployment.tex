@@ -11,7 +11,7 @@
 \addcontentsline{toc}{subsection}{Deployment Script}
 \begin{baseBoxThree}{Deployment Script}{dark}
     \bigskip
-    To illustrate the deployment process, below is an example script that demonstrates how to launch an Alpine Linux container with unique identifiers and network configuration.
+    \sTE{Description}: To illustrate the deployment process, below is an example script that demonstrates how to launch an Alpine Linux container with unique identifiers and network configuration.
     This script generates a unique prefix for the container, runs it in detached mode with the host's network stack, and assigns custom labels, hostname, and domain name. It also keeps the container running persistently, allowing for interactive management via Docker's exec command.
     \bigskip
 
@@ -28,23 +28,53 @@
     \begin{baseBoxThree}{\gDK{width=1cm}}{dark}
         \begin{posnex}
 (
-    CONTAINER_ID="$(
-        UNIQUE="$(cat /dev/urandom | tr -dc [:alnum:] | head -c 16)"
-        docker container run --detach \
-            --network=bridge \
-            --name example_${UNIQUE} \
-            --label ${UNIQUE} \
-            --hostname ${UNIQUE}.example.lab \
-            --domainname example.lab \
-            --publish-all \
-            alpine:latest sh -c "while :; do sleep 1; done"
-    )" && {
-        docker container exec --interactive --tty ${CONTAINER_ID} ash
-    }
+        CONTAINER_ID="$(
+                UNIQUE="$(cat /dev/urandom | tr -dc [:alnum:] | head -c 16)"
+                docker container run --detach \
+                    --network=bridge \
+                    --name example_${UNIQUE} \
+                    --label ${UNIQUE} \
+                    --hostname ${UNIQUE}.example.lab \
+                    --domainname example.lab \
+                    --publish-all \
+                    alpine:latest sh -c "while :; do sleep 1; done"
+        )" && {
+                docker container exec --interactive --tty ${CONTAINER_ID} ash
+        }
 )
         \end{posnex}
     \end{baseBoxThree}
     \bigskip
     Throughout this documentation, we will refer to the provided example script as a foundation for various deployment scenarios and configurations. This script demonstrates best practices for container deployment, including unique naming, network configuration, and persistent container operation. Please ensure you are familiar with this example, as it will serve as a reference point for understanding and implementing the discussed concepts.
+    \smallskip
+\end{baseBoxThree}
+
+\phantomsection{}
+\label{Removal Script}
+\addcontentsline{toc}{subsection}{Removal Script}
+\begin{baseBoxThree}{Removal Script}{dark}
+    \bigskip
+    \sTE{Description}: This script identifies and removes Docker containers with names matching the pattern \sTE{example\_XXXXXXXX} where \sTE{XXXXXXXX} is a unique 16-character alphanumeric string.
+    It lists all containers, filters those that match the name pattern, and then stops and removes each matching container.
+    The process is performed in parallel for efficiency.
+    \bigskip
+    \begin{baseBoxThree}{\gDK{width=1cm}}{dark}
+        \begin{posnex}
+(
+        for I in $(
+                docker container ls -a --format='{{.Names}} {{.ID}}' | awk '{
+                        if ($1 ~ /^example_[[:alnum:]]{16}$/) {
+                                print $2
+                        }   
+                }'
+        ); do
+                {
+                        docker container stop ${I}
+                        docker container rm ${I}
+                } &
+        done
+)
+        \end{posnex}
+    \end{baseBoxThree}
     \smallskip
 \end{baseBoxThree}
