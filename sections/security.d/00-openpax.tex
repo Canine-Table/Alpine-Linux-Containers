@@ -1,22 +1,193 @@
 \phantomsection{}
 \label{OpenPaX}
 \addcontentsline{toc}{subsection}{OpenPaX}
-
 \begin{baseBoxThree}{OpenPaX}{dark}
     \bigskip
-    \sTE{Description}: OpenPaX provides a set of security enhancements originally derived from the PaX patches for the Linux kernel.
+    \sTE{Description}: PaX provides a set of security enhancements originally derived from the PaX patches for the Linux kernel.
     These include various protections against memory corruption vulnerabilities.
     \bigskip
-    \begin{baseBoxThree}{Address Space Layout Randomization (ASLR)}{dark}
-
-    \end{baseBoxThree}
-    \smallskip
-    \begin{baseBoxThree}{Non-Executable Memory}{dark}
-    
-    \end{baseBoxThree}
-    \smallskip
-    \begin{baseBoxThree}{Memory Protection}{dark}
-    
+    \phantomsection{}
+    \label{Open Flags}
+    \begin{baseBoxThree}{Pax Flags}{info}
+        \smallskip
+        \begin{posnexItemize}
+            \item[\sA] \fD{PAGEEXEC}: Prevents execution of code on writable pages (stack and heap). 
+            This is one of the key protections against code injection attacks, ensuring that even if an attacker manages to inject malicious code, it cannot be executed.
+            \item[\sA] \fD{EMUTRAMP}: Emulates trampolines to allow certain legitimate uses of writable and executable pages.
+            This flag makes exceptions for specific, safe cases where executing writable pages is necessary, like for some just-in-time (JIT) compilers.
+            \item[\sA] \fD{MPROTECT}: Forces the use of mprotect to set memory protections, ensuring that memory protections are enforced.
+            By restricting permissions changes to memory pages, it prevents common exploits that rely on making a page writable and executable.
+            \item[\sA] \fD{RANDMMAP}: Implements Address Space Layout Randomization (ASLR) to randomize the memory layout of processes, making it harder for attackers to predict addresses.
+            This increases the complexity of attacks by making it difficult for attackers to predict the location of specific functions or variables in memory.
+            \item[\sA] \fD{SEGMEXEC}: Allows the execution of code in the data segment, providing an additional layer of protection against buffer overflow attacks.
+            This protection creates separate memory segments for executable and non-executable data, reducing the risk of executing malicious code.
+        \end{posnexItemize}
+        \smallskip
     \end{baseBoxThree}
     \smallskip
 \end{baseBoxThree}
+
+\begin{baseBoxThree}{\fU{OpenPaX}}{dark}
+    \smallskip
+    \begin{baseBoxThree}{PaX Setup}{dark}
+        \begin{posnex}
+# Ensure pax-utils and paxctl are installed in the container
+apk update && apk upgrade
+apk add pax-utils paxctl
+
+# Convert the PT_GNU_STACK program header to PT_PAX_FLAGS for busybox
+paxctl -c /bin/busybox
+
+# Check the current PaX flags for the busybox executable
+paxctl -v /bin/busybox
+        \end{posnex}
+    \end{baseBoxThree}
+    \smallskip
+    \phantomsection{}
+    \label{PAGEEXEC}
+    \begin{baseBoxThree}{\fUD{Open Flags}{PAGEEXEC}}{dark}
+        \begin{posnex}
+# Enable PAGEEXEC for an executable
+# This ensures that code cannot be executed from writable pages
+paxctl -P busybox
+
+# Disable PAGEEXEC for an executable
+# This allows execution of code from writable pages (not recommended for security)
+paxctl -p busybox
+        \end{posnex}
+    \end{baseBoxThree}
+    \smallskip
+    \phantomsection{}
+    \label{EMUTRAMP}
+    \begin{baseBoxThree}{\fUD{Open Flags}{EMUTRAMP}}{dark}
+        \begin{posnex}
+# Enable EMUTRAMP for an executable
+# This allows certain legitimate uses of writable and executable pages
+paxctl -E busybox
+
+# Disable EMUTRAMP for an executable
+# This disables the emulation of trampolines
+paxctl -e busybox
+        \end{posnex}
+    \end{baseBoxThree}
+    \smallskip
+\end{baseBoxThree}
+
+\begin{baseBoxThree}{\fU{OpenPaX}}{dark}
+    \phantomsection{}
+    \label{MPROTECT}
+    \begin{baseBoxThree}{\fUD{Open Flags}{MPROTECT}}{dark}
+        \begin{posnex}
+# Enable MPROTECT for an executable
+# This forces the use of mprotect to set memory protections
+paxctl -M busybox
+
+# Disable MPROTECT for an executable
+# This disables the enforcement of memory protections
+paxctl -m busybox
+        \end{posnex}
+    \end{baseBoxThree}
+    \smallskip
+    \phantomsection{}
+    \label{RANDMMAP}
+    \begin{baseBoxThree}{\fUD{Open Flags}{RANDMMAP}}{dark}
+        \begin{posnex}
+# Enable RANDMMAP for an executable
+# This implements ASLR to randomize the memory layout of processes
+paxctl -R busybox
+
+# Disable RANDMMAP for an executable
+# This disables the randomization of memory addresses
+paxctl -r busybox
+        \end{posnex}
+    \end{baseBoxThree}
+    \smallskip
+    \phantomsection{}
+    \label{RANDEXEC}
+    \begin{baseBoxThree}{\fUD{Open Flags}{RANDEXEC}}{dark}
+        \begin{posnex}
+    # Enable RANDEXEC for an executable
+    # This randomizes the locations of executable segments
+    paxctl -X busybox
+    
+    # Disable RANDEXEC for an executable
+    # This disables the randomization of executable segments
+    paxctl -x busybox
+        \end{posnex}
+    \end{baseBoxThree}
+    \smallskip
+    \phantomsection{}
+    \label{SEGMEXEC}
+    \begin{baseBoxThree}{\fUD{Open Flags}{SEGMEXEC}}{dark}
+        \begin{posnex}
+    # Enable SEGMEXEC for an executable
+    # This allows execution of code in the data segment
+    paxctl -S busybox
+    
+    # Disable SEGMEXEC for an executable
+    # This disables execution of code in the data segment
+    paxctl -s busybox        
+        \end{posnex}
+    \end{baseBoxThree}
+    \smallskip
+\end{baseBoxThree}
+
+\begin{baseBoxThree}{\fU{OpenPaX}}{dark}
+    \smallskip
+    \begin{baseBoxThree}{Wrap Up}{dark}
+        By integrating OpenPaX, Stack Smashing Protection, and Position Independent Executables, Alpine Linux ensures a robust security posture against various types of attacks.
+        These features help to mitigate the risks of memory corruption, buffer overflows, and code injection attacks, providing a secure environment for running applications.
+    \end{baseBoxThree}
+    \smallskip
+\end{baseBoxThree}
+
+% \begin{baseBoxThree}{PaX Flags}{info}
+%     \smallskip
+%     \begin{posnexItemize}
+%         \item[\sA] \sE{PAGEEXEC}: Prevents execution of code on writable pages (stack and heap). \begin{posnex} % -p: disable PAGEEXEC -P: enable PAGEEXEC # Disable PAGEEXEC paxctl -p /path/to/executable # Enable PAGEEXEC paxctl -P /path/to/executable \end{posnex} 
+%         \item[\sA] \sE{EMUTRAMP}: Emulates trampolines to allow certain legitimate uses of writable and executable pages. \begin{posnex} % -e: disable EMUTRAMP -E: enable EMUTRAMP # Disable EMUTRAMP paxctl -e /path/to/executable # Enable EMUTRAMP paxctl -E /path/to/executable \end{posnex}
+%         \item[\sA] \sE{MPROTECT}: Forces the use of mprotect to set memory protections, ensuring that memory protections are enforced. \begin{posnex} % -m: disable MPROTECT -M: enable MPROTECT # Disable MPROTECT paxctl -m /path/to/executable # Enable MPROTECT paxctl -M /path/to/executable \end{posnex}
+%         \item[\sA] \sE{RANDMMAP}: Implements Address Space Layout Randomization (ASLR) to randomize the memory layout of processes, making it harder for attackers to predict addresses. \begin{posnex} % -r: disable RANDMMAP -R: enable RANDMMAP # Disable RANDMMAP paxctl -r /path/to/executable # Enable RANDMMAP paxctl -R /path/to/executable \end{posnex}
+%         \item[\sA] \sE{RANDEXEC}: Randomizes the locations of executable segments, increasing the difficulty for attackers to exploit memory corruption. \begin{posnex} % -x: disable RANDEXEC -X: enable RANDEXEC # Disable RANDEXEC paxctl -x /path/to/executable # Enable RANDEXEC paxctl -X /path/to/executable \end{posnex}
+%         \item[\sA] \sE{SEGMEXEC}: Allows the execution of code in the data segment, providing an additional layer of protection against buffer overflow attacks. 
+%     \end{posnexItemize}
+%     \smallskip
+% \end{baseBoxThree}
+% -p: disable PAGEEXEC            -P: enable PAGEEXEC
+% -e: disable EMUTRAMP            -E: enable EMUTRAMP
+% -m: disable MPROTECT            -M: enable MPROTECT
+% -r: disable RANDMMAP            -R: enable RANDMMAP
+% -x: disable RANDEXEC            -X: enable RANDEXEC
+% -s: disable SEGMEXEC            -S: enable SEGMEXEC
+
+
+
+% \begin{baseBoxThree}{OpenPaX Setup}{dark}
+%     \begin{posnex}
+% # Ensure linux-firmware and initramfs-generator are installed in the container
+% apk update && apk upgrade
+% apk add linux-firmware initramfs-generator
+
+% # You can check the installed packages to ensure they are correctly installed
+% apk info linux-firmware initramfs-generator
+%     \end{posnex}
+% \end{baseBoxThree}
+% \smallskip
+
+    
+    %     \begin{baseBoxThree}{Address Space Layout Randomization (ASLR)}{dark}
+
+%     \end{baseBoxThree}
+%     \smallskip
+%     \begin{baseBoxThree}{Non-Executable Memory}{dark}
+    
+%     \end{baseBoxThree}
+%     \smallskip
+%     \begin{baseBoxThree}{Memory Protection}{dark}
+    
+%     \end{baseBoxThree}
+%     \smallskip
+%     \begin{baseBoxThree}{Wrap Up}{dark}
+%         By integrating OpenPaX, Stack Smashing Protection, and Position Independent Executables, Alpine Linux ensures a robust security posture against various types of attacks.
+%         These features help to mitigate the risks of memory corruption, buffer overflows, and code injection attacks, providing a secure environment for running applications.
+%     \end{baseBoxThree}

@@ -8,14 +8,14 @@
     \addcontentsline{toc}{subsubsection}{Networking Files}
     \begin{baseBoxThree}{Networking Files}{info}
         \begin{posnexItemize}
-            \item[\sA] \sE{/etc/network/interfaces}: The main configuration file for network interfaces. It defines how each network interface is set up (e.g., static IP, DHCP).
-            \item[\sA] \sE{/etc/network/interfaces.d}: A directory for additional network interface configurations. Any file in this directory will be included by the main interfaces file. This is useful for organizing configurations separately. 
-            \item[\sA] \sE{/etc/network/if-down.d}: Scripts in this directory are executed when an interface is brought down. This can be used for cleaning up or logging. 
+            \item[\sA] \fD{/etc/network/interfaces}: The main configuration file for network interfaces. It defines how each network interface is set up (e.g., static IP, DHCP).
+            \item[\sA] \fD{/etc/network/interfaces.d}: A directory for additional network interface configurations. Any file in this directory will be included by the main interfaces file. This is useful for organizing configurations separately. 
+            \item[\sA] \fD{/etc/network/if-down.d}: Scripts in this directory are executed when an interface is brought down. This can be used for cleaning up or logging. 
             \item[\sA] \sE{/etc/network/if-post-down.d}: Similar to if-down.d, but these scripts run after the interface has been fully brought down. 
             \item[\sA] \sE{/etc/network/if-post-up.d}: Scripts here are run after an interface is brought up. Useful for post-configuration tasks like setting additional routes or updating DNS.
-            \item[\sA] \sE{/etc/network/if-pre-down.d}: Scripts executed before an interface is brought down. Can be used for pre-shutdown checks or preparations.
-            \item[\sA] \sE{/etc/network/if-pre-up.d}: Scripts that run before an interface is brought up. Useful for preliminary checks or setting up necessary conditions before the interface is up.
-            \item[\sA] \sE{/etc/network/if-up.d}: Scripts executed when an interface is brought up. These can perform tasks such as updating network settings or notifying other services.
+            \item[\sA] \fD{/etc/network/if-pre-down.d}: Scripts executed before an interface is brought down. Can be used for pre-shutdown checks or preparations.
+            \item[\sA] \fD{/etc/network/if-pre-up.d}: Scripts that run before an interface is brought up. Useful for preliminary checks or setting up necessary conditions before the interface is up.
+            \item[\sA] \fD{/etc/network/if-up.d}: Scripts executed when an interface is brought up. These can perform tasks such as updating network settings or notifying other services.
         \end{posnexItemize}
     \end{baseBoxThree}
     \smallskip
@@ -30,9 +30,12 @@
         \end{posnexItemize}        
     \end{baseBoxThree}
 \end{baseBoxThree}
+
 \begin{baseBoxThree}{\fU{Networking}}{dark}
     \smallskip
-    \begin{baseBoxThree}{/etc/network/if-pre-up.d}{dark}
+    \phantomsection{}
+    \label{/etc/network/if-pre-up.d}
+    \begin{baseBoxThree}{\fUD{Networking Files}{/etc/network/if-pre-up.d}}{dark}
         \begin{posnex}
 #!/bin/ash
 # /etc/network/if-pre-up.d/rename-interfaces
@@ -42,7 +45,9 @@ ip link show eth1 1> /dev/null 2>&1 && ip link set dev eth1 name eth1_dhcp
         \end{posnex}
     \end{baseBoxThree}
     \smallskip
-    \begin{baseBoxThree}{/etc/network/if-up.d}{dark}
+    \phantomsection{}
+    \label{/etc/network/if-up.d}
+    \begin{baseBoxThree}{\fUD{Networking Files}{/etc/network/if-up.d}}{dark}
         \begin{posnex}
 #!/bin/ash
 # /etc/network/if-up.d/add-route
@@ -51,7 +56,9 @@ ip route add 192.168.2.0/24 via 192.168.1.1 dev eth0_static
         \end{posnex}
     \end{baseBoxThree}
     \smallskip
-    \begin{baseBoxThree}{/etc/network/interfaces}{dark}
+    \phantomsection{}
+    \label{/etc/network/interfaces}
+    \begin{baseBoxThree}{\fUD{Networking Files}{/etc/network/interfaces}}{dark}
         \begin{posnex}
 #!/bin/ash
 # /etc/network/interfaces
@@ -70,7 +77,9 @@ iface eth1_dhcp inet dhcp
 
 \begin{baseBoxThree}{\fU{Networking}}{dark}
     \smallskip
-    \begin{baseBoxThree}{/etc/network/interfaces.d}{dark}
+    \phantomsection{}
+    \label{/etc/network/interfaces.d}
+    \begin{baseBoxThree}{\fUD{Networking Files}{/etc/network/interfaces.d}}{dark}
         \begin{posnex}
 #!/bin/ash
 # /etc/network/interfaces.d/eth0_static
@@ -84,7 +93,9 @@ iface eth0_static inet static
         \end{posnex}
     \end{baseBoxThree}
     \smallskip
-    \begin{baseBoxThree}{/etc/network/if-pre-down.d}{dark}
+    \phantomsection{}
+    \label{/etc/network/if-pre-down.d}
+    \begin{baseBoxThree}{\fUD{Networking Files}{/etc/network/if-pre-down.d}}{dark}
         \begin{posnex}
 #!/bin/ash
 # /etc/network/if-pre-down.d/pre-down-check
@@ -96,7 +107,9 @@ logger "Bringing down interface: ${IFACE}"
         \end{posnex}
     \end{baseBoxThree}
     \smallskip
-    \begin{baseBoxThree}{/etc/network/if-down.d}{dark}
+    \phantomsection{}
+    \label{/etc/network/if-down.d}
+    \begin{baseBoxThree}{\fUD{Networking Files}{/etc/network/if-down.d}}{dark}
         \begin{posnex}
 #!/bin/ash
 # /etc/network/if-down.d/cleanup-routes
@@ -120,7 +133,7 @@ service networking status
         \end{posnex}
     \end{baseBoxThree}
     \bigskip
-    \sTE{Docker Container}: Use this setup if you are running lightweight, isolated applications in containers. This approach is perfect for microservices, testing, and deployment scenarios where quick startup times and efficient resource usage are critical.
+    \fUD{Note for Windows Users}{Docker Container}: Use this setup if you are running lightweight, isolated applications in containers. This approach is perfect for microservices, testing, and deployment scenarios where quick startup times and efficient resource usage are critical.
     \bigskip
     \begin{baseBoxThree}{\gDK{width=1cm}}{dark}
         \begin{posnex}

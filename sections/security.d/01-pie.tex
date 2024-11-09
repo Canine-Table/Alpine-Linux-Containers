@@ -2,6 +2,98 @@
 \label{Position Independent Executables (PIE)}
 \addcontentsline{toc}{subsection}{Position Independent Executables (PIE)}
 \begin{baseBoxThree}{Position Independent Executables (PIE)}{dark}
-
+    \bigskip
+    \sTE{Description}: Position Independent Executables (PIE) are binaries designed to be loaded at any memory address without modification. This flexibility allows the operating system to load them at different addresses each time they are executed, providing significant security benefits.
+    \bigskip
+    \phantomsection{}
+    \label{Address Space Layout Randomization (ASLR)}
+    \begin{baseBoxThree}{Address Space Layout Randomization (ASLR)}{dark}
+        \begin{posnexItemize}
+            \item[\sA] \sE{Security}: By randomizing the memory addresses used by executables, PIE makes it significantly more difficult for attackers to predict where specific functions or data are located. This randomness helps protect against various types of exploits, such as buffer overflow attacks.
+            \item[\sA] \sE{Implementation}: When a PIE binary is compiled, it does not assume it will be loaded at any fixed address, allowing the system's loader to place it anywhere in the virtual memory space.
+        \end{posnexItemize}
+    \end{baseBoxThree}
+    \smallskip
+    \begin{baseBoxThree}{Flexibility}{dark}
+        \begin{posnexItemize}
+            \item[\sA] \sE{Compatibility}: PIE binaries can be shared across different operating systems and architectures without requiring specific address space allocations.
+            \item[\sA] \sE{Optimization}: Although there may be slight performance overheads due to the additional relocations needed during execution, the security benefits usually outweigh these costs.
+        \end{posnexItemize}
+    \end{baseBoxThree}
+    \smallskip
 \end{baseBoxThree}
-\smallskip
+
+\begin{baseBoxThree}{\fU{Position Independent Executables (PIE)}}{dark}
+    \smallskip
+    \begin{baseBoxThree}{Dynamic Linking}{dark}
+        \begin{posnexItemize}
+            \item[\sA] \sE{Efficiency}: PIE works well with dynamically linked libraries (DLLs), as both can be loaded at random addresses, further enhancing security.
+            \item[\sA] \sE{Functionality}: By enabling shared code, dynamic linking helps save memory and allows for modular updates and patches, improving system maintenance.
+        \end{posnexItemize}
+    \end{baseBoxThree}
+    \smallskip
+    \begin{baseBoxThree}{Demonstration}{dark}
+        \begin{posnex}
+apk update && apk upgrade
+apk add gcc build-base
+cd /tmp
+
+{
+cat << 'EOF'
+#include<stdio.h>
+
+int main() {
+    printf("Hello, World!\n");
+    return 0;
+}
+EOF
+} > pacifc58.c
+# Compile a program as a PIE explicitly
+gcc -pie -fPIE -o pie pacifc58.c
+
+# Compile a program without explicit PIE flags
+gcc -o pacifc58 pacifc58.c
+
+# Verify if the binary is position-independent
+readelf -h pie | grep Type | awk '{print $2}' # Should show "Type: DYN"
+readelf -h pacifc58 | grep Type | awk '{print $2}' # Should also show "Type: DYN"
+        \end{posnex}
+    \end{baseBoxThree}
+    \smallskip
+    \begin{baseBoxThree}{Note}{info}
+        \smallskip
+            The two commands produce the same result because, by default, Alpine Linux compiles executables as position-independent.
+            When you compile a program using \sTE{gcc} on Alpine Linux, it generates position-independent code by default, due to the way the toolchain is configured.
+        \smallskip
+    \end{baseBoxThree}
+    \smallskip
+\end{baseBoxThree}
+
+\begin{baseBoxThree}{\fU{Position Independent Executables (PIE)}}{dark}
+    \smallskip
+    \begin{baseBoxThree}{Flags}{dark}
+        \smallskip
+        \begin{posnexItemize}
+            \item[\sA] \sE{-pie}:  This flag is used by the linker to create an executable that supports being loaded at different memory addresses.
+            \item[\sA] \sE{-fPIE}: This flag instructs the compiler to generate position-independent code. This means that the code does not assume any specific memory addresses for functions or variables.
+            \item[\sA] \sE{-pie -fPIE}: When used together, -fPIE ensures that the code generated is position-independent, and -pie ensures that the resulting executable can be loaded at any memory address.
+        \end{posnexItemize}
+        \smallskip
+    \end{baseBoxThree}
+    \smallskip
+    \begin{baseBoxThree}{Key Points}{dark}
+        \smallskip
+        \begin{posnexItemize}
+            \item[\sA] \sE{Default PIE Compilation}: Alpine Linux's GCC toolchain is configured to create Position Independent Executables (PIEs) by default. This means that even without specifying -pie and -fPIE, the resulting binaries are position-independent.
+            \item[\sA] \sE{Same Binary Type}: When you run readelf -h on both binaries, they both show Type: DYN, indicating that they are dynamically linked and position-independent.
+        \end{posnexItemize}
+        \smallskip
+    \end{baseBoxThree}
+    \smallskip
+    \begin{baseBoxThree}{Wrap Up}{dark}
+        \smallskip
+            Position Independent Executables (\fH{Position Independent Executables (PIE)}{PIE}) enhance the security and flexibility of binaries by allowing them to be loaded at random memory addresses, making it much harder for attackers to exploit vulnerabilities. By incorporating PIE, systems can achieve a higher level of security through techniques like \fH{Address Space Layout Randomization (ASLR)}{ASLR}, dynamic linking, and more.
+        \smallskip
+    \end{baseBoxThree}
+    \smallskip
+\end{baseBoxThree}
