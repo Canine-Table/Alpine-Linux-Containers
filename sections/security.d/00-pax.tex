@@ -1,7 +1,7 @@
 \phantomsection{}
-\label{OpenPaX}
-\addcontentsline{toc}{subsection}{OpenPaX}
-\begin{baseBoxThree}{OpenPaX}{dark}
+\label{PaX}
+\addcontentsline{toc}{subsection}{PaX}
+\begin{baseBoxThree}{\sL{PaX}}{dark}
     \bigskip
     \sTE{Description}: PaX provides a set of security enhancements originally derived from the PaX patches for the Linux kernel.
     These include various protections against memory corruption vulnerabilities.
@@ -27,7 +27,7 @@
     \smallskip
 \end{baseBoxThree}
 
-\begin{baseBoxThree}{\fU{OpenPaX}}{dark}
+\begin{baseBoxThree}{\fU{PaX}}{dark}
     \smallskip
     \begin{baseBoxThree}{PaX Setup}{dark}
         \begin{posnex}
@@ -73,7 +73,7 @@ paxctl -e busybox
     \smallskip
 \end{baseBoxThree}
 
-\begin{baseBoxThree}{\fU{OpenPaX}}{dark}
+\begin{baseBoxThree}{\fU{PaX}}{dark}
     \phantomsection{}
     \label{MPROTECT}
     \begin{baseBoxThree}{\fUD{Open Flags}{MPROTECT}}{dark}
@@ -132,10 +132,10 @@ paxctl -r busybox
     \smallskip
 \end{baseBoxThree}
 
-\begin{baseBoxThree}{\fU{OpenPaX}}{dark}
+\begin{baseBoxThree}{\fU{PaX}}{dark}
     \smallskip
     \begin{baseBoxThree}{Wrap Up}{dark}
-        By integrating OpenPaX, Stack Smashing Protection, and Position Independent Executables, Alpine Linux ensures a robust security posture against various types of attacks.
+        By integrating PaX, Stack Smashing Protection, and Position Independent Executables, Alpine Linux ensures a robust security posture against various types of attacks.
         These features help to mitigate the risks of memory corruption, buffer overflows, and code injection attacks, providing a secure environment for running applications.
     \end{baseBoxThree}
     \smallskip
@@ -162,7 +162,7 @@ paxctl -r busybox
 
 
 
-% \begin{baseBoxThree}{OpenPaX Setup}{dark}
+% \begin{baseBoxThree}{PaX Setup}{dark}
 %     \begin{posnex}
 % # Ensure linux-firmware and initramfs-generator are installed in the container
 % apk update && apk upgrade
@@ -188,6 +188,6 @@ paxctl -r busybox
 %     \end{baseBoxThree}
 %     \smallskip
 %     \begin{baseBoxThree}{Wrap Up}{dark}
-%         By integrating OpenPaX, Stack Smashing Protection, and Position Independent Executables, Alpine Linux ensures a robust security posture against various types of attacks.
+%         By integrating PaX, Stack Smashing Protection, and Position Independent Executables, Alpine Linux ensures a robust security posture against various types of attacks.
 %         These features help to mitigate the risks of memory corruption, buffer overflows, and code injection attacks, providing a secure environment for running applications.
 %     \end{baseBoxThree}

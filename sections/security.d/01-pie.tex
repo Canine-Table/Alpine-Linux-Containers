@@ -7,6 +7,7 @@
     \bigskip
     \phantomsection{}
     \label{Address Space Layout Randomization (ASLR)}
+    \addcontentsline{toc}{subsubsection}{Address Space Layout Randomization}
     \begin{baseBoxThree}{Address Space Layout Randomization (ASLR)}{dark}
         \begin{posnexItemize}
             \item[\sA] \sE{Security}: By randomizing the memory addresses used by executables, PIE makes it significantly more difficult for attackers to predict where specific functions or data are located. This randomness helps protect against various types of exploits, such as buffer overflow attacks.
@@ -92,7 +93,7 @@ readelf -h pacifc58 | grep Type | awk '{print $2}' # Should also show "Type: DYN
     \smallskip
     \begin{baseBoxThree}{Wrap Up}{dark}
         \smallskip
-            Position Independent Executables (\fH{Position Independent Executables (PIE)}{PIE}) enhance the security and flexibility of binaries by allowing them to be loaded at random memory addresses, making it much harder for attackers to exploit vulnerabilities. By incorporating PIE, systems can achieve a higher level of security through techniques like \fH{Address Space Layout Randomization (ASLR)}{ASLR}, dynamic linking, and more.
+            Position Independent Executables (PIE) enhance the security and flexibility of binaries by allowing them to be loaded at random memory addresses, making it much harder for attackers to exploit vulnerabilities. By incorporating PIE, systems can achieve a higher level of security through techniques like ASLR, dynamic linking, and more.
         \smallskip
     \end{baseBoxThree}
     \smallskip
