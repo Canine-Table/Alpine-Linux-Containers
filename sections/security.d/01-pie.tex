@@ -1,7 +1,7 @@
 \phantomsection{}
 \label{Position Independent Executables (PIE)}
 \addcontentsline{toc}{subsection}{Position Independent Executables (PIE)}
-\begin{baseBoxThree}{Position Independent Executables (PIE)}{dark}
+\begin{baseBoxThree}{\sL{Position Independent Executables (PIE)}}{dark}
     \bigskip
     \sTE{Description}: Position Independent Executables (PIE) are binaries designed to be loaded at any memory address without modification. This flexibility allows the operating system to load them at different addresses each time they are executed, providing significant security benefits.
     \bigskip
@@ -44,20 +44,21 @@ cat << 'EOF'
 #include<stdio.h>
 
 int main() {
-    printf("Hello, World!\n");
-    return 0;
+        printf("Hello, World!\n");
+        return 0;
 }
 EOF
-} > pacifc58.c
+} > example.c
+
 # Compile a program as a PIE explicitly
-gcc -pie -fPIE -o pie pacifc58.c
+gcc -pie -fPIE -o tmpa example.c
 
 # Compile a program without explicit PIE flags
-gcc -o pacifc58 pacifc58.c
+gcc -o tmpb example.c
 
 # Verify if the binary is position-independent
-readelf -h pie | grep Type | awk '{print $2}' # Should show "Type: DYN"
-readelf -h pacifc58 | grep Type | awk '{print $2}' # Should also show "Type: DYN"
+readelf -h tmpa | grep Type | awk '{print $2}' # Should show "DYN"
+readelf -h tmpb | grep Type | awk '{print $2}' # Should also show "DYN"
         \end{posnex}
     \end{baseBoxThree}
     \smallskip

@@ -1,8 +1,92 @@
-
 \phantomsection{}
 \label{Stack Canaries}
 \addcontentsline{toc}{subsection}{Stack Canaries}
-\begin{baseBoxThree}{Stack Canaries}{dark}
-
+\begin{baseBoxThree}{\sL{Stack Canaries}}{dark}
+    \bigskip
+    \sTE{Description}: Stack canaries are a security mechanism used to detect and prevent stack buffer overflow attacks, which occur when a program writes more data to a buffer on the stack than it can hold.
+    \bigskip
+    \begin{baseBoxThree}{Breakdown}{dark}
+        \smallskip
+        \begin{posnexItemize}
+            \item[\sA] \sE{Canary Value}: A small, known value (the "canary") is placed between the stack's control data (such as the return address) and the local variables.
+            \item[\sA] \sE{Checking the Canary}: Before a function returns, the canary value is checked to see if it has been altered.
+            \item[\sA] \sE{Detection of Overflow}: If a buffer overflow occurs and overwrites the canary value, the program detects the change and typically responds by terminating or taking other protective actions.
+        \end{posnexItemize}
+        \smallskip
+        The goal of stack canaries is to prevent the attacker from overwriting important control data, such as return addresses, without being detected.
+        \smallskip
+    \end{baseBoxThree}
+    \smallskip
+    \begin{baseBoxThree}{Types}{dark}
+        \smallskip
+        \begin{posnexItemize}
+            \item[\sA] \sE{Terminator Canaries}: These canaries contain null bytes, carriage returns, and newline characters, making them difficult to overwrite with standard string functions.
+            \item[\sA] \sE{Random Canaries}: These canaries are randomly generated at program startup, making them unpredictable and harder for an attacker to guess.
+            \item[\sA] \sE{Guard Pages}: These canaries use memory pages marked as non-readable or non-writable to detect stack overflows.
+        \end{posnexItemize}
+        \smallskip
+        Stack canaries are an important part of modern software security practices, helping to protect against certain types of buffer overflow attacks.
+        \smallskip
+    \end{baseBoxThree}
+    \smallskip
 \end{baseBoxThree}
-\smallskip
+
+\begin{baseBoxThree}{\fU{Stack Canaries}}{dark}
+    \smallskip
+    \begin{baseBoxThree}{Example}{dark}
+        \begin{posnex}
+apk update && apk upgrade
+apk add gcc build-base
+cd /tmp
+
+{
+cat << 'EOF'
+#include <stdio.h>
+#include <string.h>
+
+void vulnerable_function(char*);
+
+int main(int argc, char **argv) {
+        if (argc != 2) {
+                fprintf(stderr, "Usage: %s <input string>\n", argv[0]);
+                return 1;
+        }
+
+        vulnerable_function(argv[1]);
+        printf("Function executed successfully.\n");
+        return 0;
+}
+
+void vulnerable_function(char *str) {
+        char buffer[16];
+        strcpy(buffer, str); // This is intentionally vulnerable
+} 
+EOF
+} > vulnerable_example.c
+
+# Compile the file without stack canaries
+gcc -fno-stack-protector -o example_without_canary vulnerable_example.c
+
+# Compile the file with stack canaries enabled (default)
+gcc -o example_with_canary vulnerable_example.c
+
+# Run the program with stack canaries
+# (this should detect the overflow) 
+./example_with_canary "this_is_a_very_long_input_string"
+
+# Run the program without stack canaries
+# (this might crash or behave unexpectedly)
+./example_without_canary "this_is_a_very_long_input_string"
+        \end{posnex}
+    \end{baseBoxThree}
+\end{baseBoxThree}
+
+\begin{baseBoxThree}{\fU{Stack Canaries}}{dark}
+    \smallskip
+    \begin{baseBoxThree}{Note}{info}
+        \smallskip
+        This script demonstrates how to create and run two C programs—one with stack canaries enabled and one without. The programs are designed to illustrate how stack canaries can detect and prevent buffer overflow attacks. Because Alpine Linux is highly secure, the program without stack canaries should result in a core dump when a buffer overflow occurs.
+        \smallskip
+    \end{baseBoxThree}
+    \smallskip
+\end{baseBoxThree}

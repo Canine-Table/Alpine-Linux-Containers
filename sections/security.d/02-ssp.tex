@@ -2,6 +2,30 @@
 \label{Stack Smashing Protection (SSP)}
 \addcontentsline{toc}{subsection}{Stack Smashing Protection (SSP)}
 \begin{baseBoxThree}{Stack Smashing Protection (SSP)}{dark}
+    \bigskip
+    \sTE{Description}: what is stack smashing?
+    Stack smashing, also known as a stack buffer overflow, is a type of security vulnerability that occurs when a program writes more data to a buffer (a temporary storage area) on the stack than it can hold.
+    This excess data overwrites adjacent memory, which can corrupt the stack and potentially allow an attacker to execute arbitrary code.
+    \bigskip
+    \begin{baseBoxThree}{Breakdown}{dark}
+        \smallskip
+        \begin{posnexItemize}
+            \item[\sA] \sE{Buffer Overflow}: The program writes data beyond the allocated buffer space, spilling over into adjacent memory regions on the stack.
+            \item[\sA] \sE{Stack Corruption}: The overflowed data may overwrite important control information, such as the return address of a function.
+            \item[\sA] \sE{Exploitation}: An attacker can exploit this by carefully crafting the overflow data to overwrite the return address with the address of malicious code, causing the program to execute the attacker's code when the function returns.
+        \end{posnexItemize}
+        \smallskip
+    \end{baseBoxThree}
+    \smallskip
+    Stack smashing attacks can lead to serious security breaches, including unauthorized access and system crashes.
+    To mitigate these risks, modern compilers and operating systems implement various protections, such as \fH{Stack Canaries}{stack canaries}, \fH{Address Space Layout Randomization (ASLR)}{ASLR}, and \fH{Non-Executable Stacks}{non-executable stacks}.
+    \\
 
+    Alpine Linux compiles its binaries with stack smashing protection out of the box.
+    This typically involves adding stack canaries, which are special values placed on the stack that get checked before a function returns.
+    If the canary value has been altered, the program will detect a buffer overflow and exit gracefully instead of continuing to execute potentially malicious code.
+
+    \smallskip
 \end{baseBoxThree}
 \smallskip
+
