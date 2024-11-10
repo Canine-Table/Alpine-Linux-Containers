@@ -69,15 +69,16 @@ TMPA="$(clang -fsanitize=cfi \
     -o cfi_demo example.c 2>&1 | awk -F "'" '{print $2}')"
 
 mkdir -p $(dirname "${TMPA}")
+# Continues on the next page...
         \end{posnex}
         \smallskip
     \end{baseBoxThree}    
     \smallskip
 \end{baseBoxThree}
 
-
-\begin{baseBoxThree}{\fH{CFI Example Script}{\faAngleUp~CFI Example Script}}{dark}
-    \begin{posnex}
+\begin{baseBoxThree}{\fU{Control Flow Integrity (CFI)}}{dark}
+    \begin{baseBoxThree}{\fH{CFI Example Script}{\faAngleUp~CFI Example Script}}{dark}
+        \begin{posnex}
 {
 cat << 'EOF'
 fun:func
@@ -90,21 +91,28 @@ clang -fsanitize=cfi -flto \
     -fvisibility=hidden \
     -o cfi_demo example.c
 
-# Valid input (target_function will be executed) 
+# Valid input (target_function will be executed)
 ./cfi_demo 1 # Output: Target function executed.
 
 # Invalid input (CFI should detect control flow hijacking)
 ./cfi_demo 0x12345678
 
 objdump -d cfi_demo | grep '.cfi'
-    \end{posnex}
+        \end{posnex}
+    \end{baseBoxThree}
+    \smallskip
+    \begin{baseBoxThree}{Note}{info}
+        \smallskip
+        While GCC has some support for CFI, Clang's implementation of CFI is more mature and reliable.
+        Clang provides better instrumentation and runtime checks, making it a preferred choice for enabling advanced security features like CFI.
+        This is why we used Clang in our demonstration to ensure robust and effective protection against control flow hijacking attacks.
+        \smallskip
+    \end{baseBoxThree}
+    \smallskip
+    \begin{baseBoxThree}{Wrap Up}{dark}
+        \smallskip
+        We also demonstrated how to compile a C program with CFI enabled using Clang, and verified the presence of CFI instrumentation in the binary using readelf.
+        \smallskip
+    \end{baseBoxThree}
+    \smallskip
 \end{baseBoxThree}
-
-% # Compile the C program with CFI enabled
-% gcc -fsanitize=cfi -o cfi_demo example.c
-
-% # Valid input (target_function will be executed)
-% ./cfi_demo 1
-
-% # Invalid input (CFI should detect control flow hijacking)
-% ./cfi_demo 0x12345678

@@ -1,12 +1,47 @@
 \phantomsection{}
 \label{Data Execution Prevention (DEP)}
 \addcontentsline{toc}{subsection}{Data Execution Prevention (DEP)}
-\begin{baseBoxThree}{Data Execution Prevention (DEP)}{dark}
+\begin{baseBoxThree}{\sL{Data Execution Prevention (DEP)}}{dark}
     \bigskip
-    \sTE{Description}:
+    \sTE{Description}: DEP is a security feature that helps prevent code from being executed in certain regions of memory that are not intended to contain executable code. This can help protect against attacks that exploit vulnerabilities by injecting malicious code into a program's data areas, such as the stack or heap.
     \bigskip
-    \begin{baseBoxThree}{}{dark}
+    \begin{baseBoxThree}{How DEP Works}{dark}
+        \smallskip
+        DEP marks specific areas of memory as non-executable.
+        If a program attempts to run code from these non-executable regions, DEP intervenes and prevents the execution, often resulting in the program being terminated.
+        This helps to mitigate various types of attacks, such as buffer overflow and stack-based attacks, where malicious code is injected into data areas.
+        \smallskip
+    \end{baseBoxThree}
+    \smallskip
+    \begin{baseBoxThree}{Types of DEP}{dark}
+        \smallskip
+        \begin{posnexItemize}
+            \item[\sA] \sE{Hardware-enforced DEP}: Utilizes hardware capabilities in modern CPUs to mark memory regions as non-executable. This is the most effective form of DEP.
+            \item[\sA] \sE{Software-enforced DEP}: Provides similar protection through software mechanisms. It is used in environments where hardware DEP is not available or supported.
+        \end{posnexItemize}
+        \smallskip
+    \end{baseBoxThree}
+    \smallskip
+    \begin{baseBoxThree}{Benefits of DEP}{dark}
+        \smallskip
+        \begin{posnexItemize}
+            \item[\sA] \sE{Preventing malicious code execution}: Prevents malicious code from executing in non-executable memory regions.
+            \item[\sA] \sE{Reducing attack surface}: Reduces the attack surface for various exploits, enhancing overall system security.
+            \item[\sA] \sE{Integration with other security measures}: Works in conjunction with other security measures, such as \fH{Address Space Layout Randomization (ASLR)}{ASLR} and \fH{Control Flow Integrity (CFI)}{CFI}, to provide comprehensive protection.
+        \end{posnexItemize}
+        \smallskip
+    \end{baseBoxThree}
+    \smallskip
+\end{baseBoxThree}
 
+\begin{baseBoxThree}{\fU{Data Execution Prevention (DEP)}}{dark}
+    \smallskip
+    \begin{baseBoxThree}{DEP Example}{dark}
+        \begin{posnex}
+apk update && apk upgrade
+apk add gcc build-base
+cd /tmp
+        \end{posnex}
     \end{baseBoxThree}
     \smallskip
 \end{baseBoxThree}
