@@ -1,12 +1,110 @@
 \phantomsection{}
 \label{Control Flow Integrity (CFI)}
 \addcontentsline{toc}{subsection}{Control Flow Integrity (CFI)}
-\begin{baseBoxThree}{Control Flow Integrity (CFI)}{dark}
+\begin{baseBoxThree}{\sL{Control Flow Integrity (CFI)}}{dark}
     \bigskip
-    \sTE{Description}:
+    \sTE{Description}: Control Flow Integrity (CFI) is a security technique designed to ensure that the control flow of a program remains unaltered during execution.
+    It prevents attackers from hijacking the program's control flow, which is a common goal in many exploits, such as buffer overflow attacks.
+    By enforcing CFI, the program can only execute legitimate control flow paths, making it much harder for attackers to execute arbitrary code.
     \bigskip
-    \begin{baseBoxThree}{}{dark}
-
+    \begin{baseBoxThree}{How CFI Works}{dark}
+        \smallskip
+        \begin{posnexItemize}
+            \item[\sA] \sE{Instrumenting Code}: Adding checks to the program's code to ensure that indirect jumps and calls only go to valid targets.
+            \item[\sA] \sE{Creating Control Flow Graphs (CFG)}: Mapping out all possible paths the program can take during execution.
+            \item[\sA] \sE{Checking Transfers}: At runtime, verifying that control transfers (like function calls and returns) follow the paths defined in the CFG.
+        \end{posnexItemize}
+        \smallskip
     \end{baseBoxThree}
     \smallskip
 \end{baseBoxThree}
+
+\begin{baseBoxThree}{\fU{Control Flow Integrity (CFI)}}{dark}
+    \smallskip
+    \phantomsection{}
+    \label{CFI Example Script}
+    \begin{baseBoxThree}{CFI Example Script}{dark}
+        \smallskip
+        \begin{posnex}
+apk update && apk upgrade
+apk add clang build-base
+cd /tmp
+
+{
+cat << 'EOF'
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+void target_function() {
+        printf("Target function executed.\n");
+}
+
+void vulnerable_function(void (*func)()) {
+        func();
+}
+
+int main(int argc, char **argv) {
+        if (argc != 2) {
+                fprintf(stderr, "Usage: %s <input>\n", argv[0]);
+                return 1;
+        }
+
+        void (*func)() = NULL;
+
+        if (argv[1][0] == '1')
+                func = target_function;
+        else
+                func = (void (*)())(uintptr_t)strtoul(argv[1], NULL, 0);
+
+        vulnerable_function(func);
+
+        return 0;
+}
+EOF
+} > example.c
+
+TMPA="$(clang -fsanitize=cfi \
+    -flto -fvisibility=hidden \
+    -o cfi_demo example.c 2>&1 | awk -F "'" '{print $2}')"
+
+mkdir -p $(dirname "${TMPA}")
+        \end{posnex}
+        \smallskip
+    \end{baseBoxThree}    
+    \smallskip
+\end{baseBoxThree}
+
+
+\begin{baseBoxThree}{\fH{CFI Example Script}{\faAngleUp~CFI Example Script}}{dark}
+    \begin{posnex}
+{
+cat << 'EOF'
+fun:func
+EOF
+} > "${TMPA}"
+
+unset TMPA
+
+clang -fsanitize=cfi -flto \
+    -fvisibility=hidden \
+    -o cfi_demo example.c
+
+# Valid input (target_function will be executed) 
+./cfi_demo 1 # Output: Target function executed.
+
+# Invalid input (CFI should detect control flow hijacking)
+./cfi_demo 0x12345678
+
+objdump -d cfi_demo | grep '.cfi'
+    \end{posnex}
+\end{baseBoxThree}
+
+% # Compile the C program with CFI enabled
+% gcc -fsanitize=cfi -o cfi_demo example.c
+
+% # Valid input (target_function will be executed)
+% ./cfi_demo 1
+
+% # Invalid input (CFI should detect control flow hijacking)
+% ./cfi_demo 0x12345678

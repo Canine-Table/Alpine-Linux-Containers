@@ -13,7 +13,9 @@
             \item[\sA] \sE{Detection of Overflow}: If a buffer overflow occurs and overwrites the canary value, the program detects the change and typically responds by terminating or taking other protective actions.
         \end{posnexItemize}
         \smallskip
-        The goal of stack canaries is to prevent the attacker from overwriting important control data, such as return addresses, without being detected.
+        \begin{baseBoxThree}{}{dark}
+            The goal of stack canaries is to prevent the attacker from overwriting important control data, such as return addresses, without being detected.
+        \end{baseBoxThree}
         \smallskip
     \end{baseBoxThree}
     \smallskip
@@ -26,13 +28,17 @@
             \item[\sA] \sE{Random Canaries}: These canaries are randomly generated at program startup, making them unpredictable and harder for an attacker to guess.
             \item[\sA] \sE{Guard Pages}: These canaries use memory pages marked as non-readable or non-writable to detect stack overflows.
         \end{posnexItemize}
-        \bigskip
-        Stack canaries are an important part of modern software security practices, helping to protect against certain types of buffer overflow attacks.
+        \smallskip
+        \begin{baseBoxThree}{}{dark}
+            Stack canaries are an important part of modern software security practices, helping to protect against certain types of buffer overflow attacks.
+        \end{baseBoxThree}
         \smallskip
     \end{baseBoxThree}
-    \bigskip
-    The script below demonstrates how to create and run two C programs—one with stack canaries enabled and one without.
-    The programs are designed to illustrate how stack canaries can detect and prevent buffer overflow attacks.
+    \smallskip
+    \begin{baseBoxThree}{}{dark}
+        The script below demonstrates how to create and run two C programs—one with stack canaries enabled and one without.
+        The programs are designed to illustrate how stack canaries can detect and prevent buffer overflow attacks.
+    \end{baseBoxThree}
     \smallskip
 \end{baseBoxThree}
 
@@ -43,7 +49,7 @@
     \begin{baseBoxThree}{\fUD{Types of Canaries}{Example: Terminator Canary}}{dark}
         \begin{posnex}
 apk update && apk upgrade
-apk add gcc build-base
+apk add clang build-base
 cd /tmp
 
 {
@@ -94,6 +100,18 @@ gcc -o example_with_canary vulnerable_example.c
         \smallskip
             Since this is Alpine, you should expect the program without stack canaries to result in a core dump when a buffer overflow occurs.
             This demonstrates the robustness of Alpine's handling of such vulnerabilities.
+        \smallskip
+    \end{baseBoxThree}
+    \smallskip
+    \begin{baseBoxThree}{Wrap Up}{dark}
+        \smallskip
+        We provided examples of simple C programs, one with stack canaries enabled and one without, to demonstrate how canaries help detect and prevent buffer overflow attacks.
+        \\
+        
+        Stack canaries play a crucial role in modern software security by providing a line of defense against stack buffer overflow attacks, which can lead to serious security breaches, unauthorized access, and system crashes.
+        \\
+
+        Stack canaries are just one of many techniques used to enhance software security, but their effectiveness in detecting and preventing buffer overflows makes them a valuable tool in the fight against exploitation.
         \smallskip
     \end{baseBoxThree}
     \smallskip

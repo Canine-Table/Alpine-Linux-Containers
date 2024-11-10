@@ -1,7 +1,7 @@
 \phantomsection{}
 \label{Stack Smashing Protection (SSP)}
 \addcontentsline{toc}{subsection}{Stack Smashing Protection (SSP)}
-\begin{baseBoxThree}{Stack Smashing Protection (SSP)}{dark}
+\begin{baseBoxThree}{\sL{Stack Smashing Protection (SSP)}}{dark}
     \bigskip
     \sTE{Description}: what is stack smashing?
     Stack smashing, also known as a stack buffer overflow, is a type of security vulnerability that occurs when a program writes more data to a buffer (a temporary storage area) on the stack than it can hold.
@@ -24,8 +24,5 @@
     Alpine Linux compiles its binaries with stack smashing protection out of the box.
     This typically involves adding stack canaries, which are special values placed on the stack that get checked before a function returns.
     If the canary value has been altered, the program will detect a buffer overflow and exit gracefully instead of continuing to execute potentially malicious code.
-
     \smallskip
 \end{baseBoxThree}
-\smallskip
-
