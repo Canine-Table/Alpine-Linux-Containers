@@ -120,13 +120,13 @@ paxctl -r busybox
     \label{SEGMEXEC}
     \begin{baseBoxThree}{\fUD{Open Flags}{SEGMEXEC}}{dark}
         \begin{posnex}
-    # Enable SEGMEXEC for an executable
-    # This allows execution of code in the data segment
-    paxctl -S busybox
-    
-    # Disable SEGMEXEC for an executable
-    # This disables execution of code in the data segment
-    paxctl -s busybox        
+# Enable SEGMEXEC for an executable
+# This allows execution of code in the data segment
+paxctl -S busybox
+
+# Disable SEGMEXEC for an executable
+# This disables execution of code in the data segment
+paxctl -s busybox        
         \end{posnex}
     \end{baseBoxThree}
     \smallskip
@@ -140,54 +140,3 @@ paxctl -r busybox
     \end{baseBoxThree}
     \smallskip
 \end{baseBoxThree}
-
-% \begin{baseBoxThree}{PaX Flags}{info}
-%     \smallskip
-%     \begin{posnexItemize}
-%         \item[\sA] \sE{PAGEEXEC}: Prevents execution of code on writable pages (stack and heap). \begin{posnex} % -p: disable PAGEEXEC -P: enable PAGEEXEC # Disable PAGEEXEC paxctl -p /path/to/executable # Enable PAGEEXEC paxctl -P /path/to/executable \end{posnex} 
-%         \item[\sA] \sE{EMUTRAMP}: Emulates trampolines to allow certain legitimate uses of writable and executable pages. \begin{posnex} % -e: disable EMUTRAMP -E: enable EMUTRAMP # Disable EMUTRAMP paxctl -e /path/to/executable # Enable EMUTRAMP paxctl -E /path/to/executable \end{posnex}
-%         \item[\sA] \sE{MPROTECT}: Forces the use of mprotect to set memory protections, ensuring that memory protections are enforced. \begin{posnex} % -m: disable MPROTECT -M: enable MPROTECT # Disable MPROTECT paxctl -m /path/to/executable # Enable MPROTECT paxctl -M /path/to/executable \end{posnex}
-%         \item[\sA] \sE{RANDMMAP}: Implements Address Space Layout Randomization (ASLR) to randomize the memory layout of processes, making it harder for attackers to predict addresses. \begin{posnex} % -r: disable RANDMMAP -R: enable RANDMMAP # Disable RANDMMAP paxctl -r /path/to/executable # Enable RANDMMAP paxctl -R /path/to/executable \end{posnex}
-%         \item[\sA] \sE{RANDEXEC}: Randomizes the locations of executable segments, increasing the difficulty for attackers to exploit memory corruption. \begin{posnex} % -x: disable RANDEXEC -X: enable RANDEXEC # Disable RANDEXEC paxctl -x /path/to/executable # Enable RANDEXEC paxctl -X /path/to/executable \end{posnex}
-%         \item[\sA] \sE{SEGMEXEC}: Allows the execution of code in the data segment, providing an additional layer of protection against buffer overflow attacks. 
-%     \end{posnexItemize}
-%     \smallskip
-% \end{baseBoxThree}
-% -p: disable PAGEEXEC            -P: enable PAGEEXEC
-% -e: disable EMUTRAMP            -E: enable EMUTRAMP
-% -m: disable MPROTECT            -M: enable MPROTECT
-% -r: disable RANDMMAP            -R: enable RANDMMAP
-% -x: disable RANDEXEC            -X: enable RANDEXEC
-% -s: disable SEGMEXEC            -S: enable SEGMEXEC
-
-
-
-% \begin{baseBoxThree}{PaX Setup}{dark}
-%     \begin{posnex}
-% # Ensure linux-firmware and initramfs-generator are installed in the container
-% apk update && apk upgrade
-% apk add linux-firmware initramfs-generator
-
-% # You can check the installed packages to ensure they are correctly installed
-% apk info linux-firmware initramfs-generator
-%     \end{posnex}
-% \end{baseBoxThree}
-% \smallskip
-
-    
-    %     \begin{baseBoxThree}{Address Space Layout Randomization (ASLR)}{dark}
-
-%     \end{baseBoxThree}
-%     \smallskip
-%     \begin{baseBoxThree}{Non-Executable Memory}{dark}
-    
-%     \end{baseBoxThree}
-%     \smallskip
-%     \begin{baseBoxThree}{Memory Protection}{dark}
-    
-%     \end{baseBoxThree}
-%     \smallskip
-%     \begin{baseBoxThree}{Wrap Up}{dark}
-%         By integrating PaX, Stack Smashing Protection, and Position Independent Executables, Alpine Linux ensures a robust security posture against various types of attacks.
-%         These features help to mitigate the risks of memory corruption, buffer overflows, and code injection attacks, providing a secure environment for running applications.
-%     \end{baseBoxThree}
