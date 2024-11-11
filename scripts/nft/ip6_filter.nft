@@ -1,0 +1,23 @@
+table ip6 filter {
+        chain DOCKER {
+        }
+
+        chain DOCKER-ISOLATION-STAGE-1 {
+                iifname "docker0" oifname != "docker0" counter packets 0 bytes 0 jump DOCKER-ISOLATION-STAGE-2
+                counter packets 0 bytes 0 return
+        }
+
+        chain DOCKER-ISOLATION-STAGE-2 {
+                oifname "docker0" counter packets 0 bytes 0 drop
+                counter packets 0 bytes 0 return
+        }
+
+        chain FORWARD {
+                type filter hook forward priority filter; policy drop;
+                counter packets 0 bytes 0 jump DOCKER-USER
+        }
+
+        chain DOCKER-USER {
+                counter packets 0 bytes 0 return
+        }
+}

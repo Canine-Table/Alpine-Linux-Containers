@@ -1,0 +1,4 @@
+table ip6 nat {
+        chain DOCKER {
+        }
+}
