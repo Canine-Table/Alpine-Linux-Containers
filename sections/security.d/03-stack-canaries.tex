@@ -52,8 +52,7 @@ apk update && apk upgrade
 apk add clang build-base
 cd /tmp
 
-{
-cat << 'EOF'
+cat > vulnerable_example.c << 'EOF'
 #include <stdio.h>
 #include <string.h>
 
@@ -75,7 +74,6 @@ void vulnerable_function(char *str) {
         strcpy(buffer, str); // This is intentionally vulnerable
 } 
 EOF
-} > vulnerable_example.c
 
 # Compile the file without stack canaries
 gcc -fno-stack-protector -o example_without_canary vulnerable_example.c

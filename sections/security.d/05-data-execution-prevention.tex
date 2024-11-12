@@ -42,8 +42,7 @@ apk update && apk upgrade
 apk add gcc build-base
 cd /tmp
 
-{
-cat << 'EOF'
+cat > example.c << 'EOF'
 #include <stdio.h>
 #include <string.h>
 
@@ -71,11 +70,13 @@ void vulnerable_function(char *str) {
         // This is intentionally vulnerable
         strcpy(buffer, str);
 }
-} > example.c
-gcc -z noexecstack -fno-stack-protector -o dep_demo example.c
-./dep_demo "short_input"
-./dep_demo "this_is_a_very_long_input_string_that_overflows_the_buffer"
+EOF
 
+gcc -z noexecstazck -fno-stack-protector -o dep_demo example.c
+
+./dep_demo "short_input"
+
+./dep_demo "this_is_a_very_long_input_string_that_overflows_the_buffer"
         \end{posnex}
     \end{baseBoxThree}
     \smallskip

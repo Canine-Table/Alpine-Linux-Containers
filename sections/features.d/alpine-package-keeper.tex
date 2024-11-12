@@ -67,30 +67,25 @@
         \smallskip
         Due to length constraints, the full script for extracting and displaying metadata from the APKINDEX files is hosted on GitHub. You can find the complete script at the following link:
         \href{https://github.com/Canine-Table/Alpine-Linux-Containers/blob/main/scripts/shell/apk-query.sh}{View the Full Script on GitHub}
+        This script will guide you through extracting, parsing, and displaying detailed information about packages in Alpine Linux.
         \smallskip
     \end{baseBoxThree}
     \smallskip
 \end{baseBoxThree}
 
 \begin{baseBoxThree}{\fU{Alpine Package Keeper}}{dark}
-    \begin{baseBoxThree}{Package Installation}{dark}
+    \begin{baseBoxThree}{Important flags (apk add)}{dark}
         \smallskip
         \phantomsection{}
         \label{apk add}
         \begin{posnexItemize}
-            \item[\sA] \sE{--no-cache}: The option fetches the latest package information from the repositories and does not store the package index locally.
+            \item[\sA] \sE{--no-cache}: The option fetches the latest package information from the repositories and does not store the package index (metadata) locally.
             \item[\sA] \sE{--update-cache or -U}: This flag forces a cache update before installing the package.
             \item[\sA] \sE{--virtual or -t}: This flag allows you to create a virtual package that groups multiple packages together.
             \item[\sA] \sE{--interactive or -i}: This flag prompts for confirmation before installing packages.
-            \item[\sA] \sE{--no-scripts or -X}: This flag skips running trigger scripts during package installation.
             \item[\sA] \sE{--repository or -X}: This flag specifies an additional repository to use for the package installation.
             \item[\sA] \sE{--force or -f}: This flag forces the installation of a package even if it would replace another package.
             \item[\sA] \sE{--root or -p}: This flag installs packages to a different root directory.
-            \item[\sA] \sE{--update or -U}: This flag updates all the available packages before installing the specified package.
-            \item[\sA] \sE{--allow-untrusted or -U}: This flag allows the installation of untrusted packages (packages that are not signed with a trusted key).
-            \item[\sA] \sE{--wait or -w}: This flag waits for the lock to be released before proceeding with the installation.
-            \item[\sA] \sE{--clean-protected or -P}: This flag cleans the package index after installation, even if it's protected.
-            \item[\sA] \sE{--no-progress or -q}: This flag suppresses the progress output during installation.
             \item[\sA] \sE{--arch or -a}: This flag installs a package for a different architecture.
             \item[\sA] \sE{--simulate or -s}: This flag simulates the installation without actually performing it.
             \item[\sA] \sE{--quiet or -q}: This flag suppresses all output, making the installation process completely silent.
@@ -117,38 +112,6 @@
     \end{baseBoxThree}
     \smallskip
 \end{baseBoxThree}
-
-% \baseTcBoxTwo{dark}{}
-% \faFileArchive
-%Each repository specified within the /etc/apk/repositories in Alpine Linux creates a file named APKINDEX.[a-f0-9]{8}.tar.gz. This file contains metadata about the packages available in the repository. Let's break down its contents and structure
-% \begin{baseBoxThree}{\fU{Alpine Package Keeper}}{dark}
-%     \smallskip
-%     \begin{baseBoxThree}{\fUD{apk add}{}}{dark}
-%         \begin{posnex}
-%         \end{posnex}
-%     \end{baseBoxThree}
-%     \smallskip
-% \end{baseBoxThree}
-
-% # Install man-db and man-db-doc
-% apk add --no-cache man-db man-db-doc
-
-% # After installing, you can verify that the man-db is working by running
-% man man
-
-% \begin{baseBoxThree}{\fU{Alpine Package Keeper}}{dark}
-%     \begin{baseBoxThree}{}{dark}
-%         \smallskip
-%         \begin{posnexItemize}
-%             \item[\sA] \sE{}:
-%             \item[\bTA] \bT{}
-%         \end{posnexItemize}
-%         \smallskip
-%         \begin{posnex}
-%         \end{posnex}
-%     \end{baseBoxThree}
-%     \smallskip
-% \end{baseBoxThree}
 
 \begin{baseBoxThree}{\fU{Alpine Package Keeper}}{dark}
     \smallskip

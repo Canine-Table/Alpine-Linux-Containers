@@ -7,10 +7,10 @@
         # Create a combined APKINDEX tar file from all matching files in /var/cache/apk/
         [ -f '/tmp/APKINDEX' ] || {
                 for I in $(ls /var/cache/apk/ | awk '{
-                    for (i = 0; i < NF; i++) {
-                            if($i ~ /^APKINDEX[.][a-f0-9]{8}[.]tar[.]gz$/) 
-                                    print $i
-                            }
+                        for (i = 0; i < NF; i++) {
+                                if($i ~ /^APKINDEX[.][a-f0-9]{8}[.]tar[.]gz$/) 
+                                        print $i
+                        }
                 }'); do
                         cat /var/cache/apk/$I
                 done > /tmp/APKINDEX.tar.gz

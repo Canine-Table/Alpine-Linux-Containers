@@ -39,8 +39,7 @@ apk update && apk upgrade
 apk add gcc build-base
 cd /tmp
 
-{
-cat << 'EOF'
+cat > example.c << 'EOF'
 #include<stdio.h>
 
 int main() {
@@ -48,7 +47,6 @@ int main() {
         return 0;
 }
 EOF
-} > example.c
 
 # Compile a program as a PIE explicitly
 gcc -pie -fPIE -o tmpa example.c
@@ -87,7 +85,7 @@ readelf -h tmpb | grep Type | awk '{print $2}' # Should also show "DYN"
         \smallskip
         \begin{posnexItemize}
             \item[\sA] \sE{Default PIE Compilation}: Alpine Linux's GCC toolchain is configured to create Position Independent Executables (PIEs) by default. This means that even without specifying -pie and -fPIE, the resulting binaries are position-independent.
-            \item[\sA] \sE{Same Binary Type}: When you run readelf -h on both binaries, they both show Type: DYN, indicating that they are dynamically linked and position-independent.
+            \item[\sA] \sE{Same Binary Type}: When you run readelf -h on both binaries, they both show DYN, indicating that they are dynamically linked and position-independent.
         \end{posnexItemize}
         \smallskip
     \end{baseBoxThree}
