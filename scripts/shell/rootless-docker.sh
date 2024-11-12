@@ -1,4 +1,4 @@
-#docker network create --subnet 172.16.0.0/16 --gateway 192.168.10.1 my_new_network
+#docker network create --subnet 172.16.0.0/16 --gateway 172.16.0.1 lab
 
 (
         CONTAINER_ID="$(

@@ -106,13 +106,13 @@ paxctl -r busybox
     \label{RANDEXEC}
     \begin{baseBoxThree}{\fUD{Open Flags}{RANDEXEC}}{dark}
         \begin{posnex}
-    # Enable RANDEXEC for an executable
-    # This randomizes the locations of executable segments
-    paxctl -X busybox
-    
-    # Disable RANDEXEC for an executable
-    # This disables the randomization of executable segments
-    paxctl -x busybox
+# Enable RANDEXEC for an executable
+# This randomizes the locations of executable segments
+paxctl -X busybox
+
+# Disable RANDEXEC for an executable
+# This disables the randomization of executable segments
+paxctl -x busybox
         \end{posnex}
     \end{baseBoxThree}
     \smallskip
@@ -126,7 +126,7 @@ paxctl -S busybox
 
 # Disable SEGMEXEC for an executable
 # This disables execution of code in the data segment
-paxctl -s busybox        
+paxctl -s busybox
         \end{posnex}
     \end{baseBoxThree}
     \smallskip

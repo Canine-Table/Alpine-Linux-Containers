@@ -14,4 +14,3 @@
             docker container exec --interactive --tty ${CONTAINER_ID} ash
         }
 )
-
