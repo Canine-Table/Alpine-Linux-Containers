@@ -1,3 +1,5 @@
+#!/bin/sh
+
 (
         # Navigate to the temporary directory
         cd /tmp
@@ -61,7 +63,7 @@
         # Clean up temporary files unless the keep flag is provided
         [ "$2" = -k -o "$2" = '--keep' ] || {
                 for I in APKINDEX.tar.gz APKINDEX DESCRIPTION; do
-                        rm -f $I    
+                        rm -f $I
                 done
         } &
 ) | $(
@@ -69,4 +71,7 @@
         for I in less more tee; do
                 command -v $I && exit;
         done
+
+        # If no display command is found, fall back to true (does nothing) true
+        true
 )

@@ -20,9 +20,9 @@
     \end{baseBoxThree}
     \smallskip
     \phantomsection{}
-    \label{APKINDEX File Structure}
-    \addcontentsline{toc}{subsubsection}{APKINDEX File Structure}
-    \begin{baseBoxThree}{\sTE{APKINDEX File Structure}}{dark}
+    \label{APK Metadata}
+    \addcontentsline{toc}{subsubsection}{APK Metadata}
+    \begin{baseBoxThree}{\sTE{APK Metadata}}{dark}
         \smallskip
         \begin{baseBoxThree}{}{dark}
             \smallskip
@@ -33,47 +33,41 @@
             \smallskip
         \end{baseBoxThree}
         \smallskip
-        \begin{posnexItemize}
-            \item[\sA] \sE{C}: This field represents the checksum of the package.
-            \item[\bTA] \bT{C:Q1Nm9h8PyFG3AgOglJgGZ6ZF/MD14=}
-        \end{posnexItemize}
     \end{baseBoxThree}
     \smallskip
 \end{baseBoxThree}
 
 \begin{baseBoxThree}{\fU{Alpine Package Keeper}}{dark}
     \smallskip
-    \begin{baseBoxThree}{\fUD{APKINDEX File Structure}{APKINDEX File Structure}}{dark}
+    \begin{baseBoxThree}{\fUD{APK Metadata}{APK Metadata}}{dark}
         \begin{posnexItemize}
+            \item[\sA] \sE{C}: This field represents the checksum of the package.
             \item[\sA] \sE{P}: The package name.
-            \item[\bTA] \bT{P:zziplib-dev}
-            \item[\sA] \sE{V}:
-            \item[\bTA] \bT{}
-            \item[\sA] \sE{A}:
-            \item[\bTA] \bT{}
-            \item[\sA] \sE{S}:
-            \item[\bTA] \bT{}
-            \item[\sA] \sE{I}:
-            \item[\bTA] \bT{}
-            \item[\sA] \sE{T}:
-            \item[\bTA] \bT{}
-            \item[\sA] \sE{U}:
-            \item[\bTA] \bT{}
-            \item[\sA] \sE{L}:
-            \item[\bTA] \bT{}
-            \item[\sA] \sE{o}:
-            \item[\bTA] \bT{}
-            \item[\sA] \sE{m}:
-            \item[\bTA] \bT{}
-            \item[\sA] \sE{t}:
-            \item[\bTA] \bT{}
-            \item[\sA] \sE{c}:
-            \item[\bTA] \bT{}
-            \item[\sA] \sE{D}:
-            \item[\bTA] \bT{}
-            \item[\sA] \sE{p}: Provides information on which packages this package can provide or replace. 
-            \item[\bTA] \bT{p:pc:zzipfseeko=0.13.72 pc:zziplib=0.13.72 ...}
+            \item[\sA] \sE{V}: Version of the package, including the release number
+            \item[\sA] \sE{A}: Architecture for which the package is built (e.g., x86\_64, armhf)
+            \item[\sA] \sE{S}: Package size in bytes
+            \item[\sA] \sE{I}: Installed size in bytes
+            \item[\sA] \sE{T}: Short description of the package
+            \item[\sA] \sE{U}: URL for the package's source or project page
+            \item[\sA] \sE{L}: License under which the package is distributed
+            \item[\sA] \sE{o}: Origin, which is usually the base package name
+            \item[\sA] \sE{m}: Maintainer's name and email address
+            \item[\sA] \sE{t}: Build timestamp in Unix epoch format
+            \item[\sA] \sE{c}: Package's commit or checksum identifier
+            \item[\sA] \sE{D}: Dependencies required by the package
+            \item[\sA] \sE{p}: Provides information on which packages this package can provide or replace
+            \item[\sA] \sE{k}: Whether the package is a subpackage
+            \item[\sA] \sE{M}: Message shown post-installation or post-removal
+            \item[\sA] \sE{i}: information about installed files
+            \item[\sA] \sE{e}: Explanation of ABI compatibility            
         \end{posnexItemize}
+    \end{baseBoxThree}
+    \smallskip
+    \begin{baseBoxThree}{Script for Extracting and Displaying APKINDEX Metadata}{dark}
+        \smallskip
+        Due to length constraints, the full script for extracting and displaying metadata from the APKINDEX files is hosted on GitHub. You can find the complete script at the following link:
+        \href{https://github.com/Canine-Table/Alpine-Linux-Containers/blob/main/scripts/shell/apk-query.sh}{View the Full Script on GitHub}
+        \smallskip
     \end{baseBoxThree}
     \smallskip
 \end{baseBoxThree}
@@ -110,7 +104,6 @@
     \begin{baseBoxThree}{\fUD{apk add}{--no-cache}}{dark}
         \begin{posnex}
         \end{posnex}
-        
         \smallskip
     \end{baseBoxThree}
     \smallskip
@@ -129,6 +122,7 @@
 % \faFileArchive
 %Each repository specified within the /etc/apk/repositories in Alpine Linux creates a file named APKINDEX.[a-f0-9]{8}.tar.gz. This file contains metadata about the packages available in the repository. Let's break down its contents and structure
 % \begin{baseBoxThree}{\fU{Alpine Package Keeper}}{dark}
+%     \smallskip
 %     \begin{baseBoxThree}{\fUD{apk add}{}}{dark}
 %         \begin{posnex}
 %         \end{posnex}
