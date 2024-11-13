@@ -1,7 +1,7 @@
 #!/bin/sh
 
 sanitize() {
-        echo -n "$*" | awk '{
+        echo -n $* | awk '{
                 for (i = 1; i <= length($0); i++) {
                         str = substr($0, i, 1)
                         
@@ -11,19 +11,5 @@ sanitize() {
                                 printf("%s", str)
                 }
         }'
-}
-
-bmv() {
-        (
-                echo -n "$(ls --color=never -1)" | while read -r line; do
-                        j=$((j+1))
-                        mv "$line" "$(echo "$(sanitize "$line")" | sed '
-                                s/[.]/_'$(($(date +"%s")+j))'&/; t end
-                                s/$/_'$(($(date +"%s")+j))'/
-
-                                :end
-                                q
-                        ')"
-                done
-        )
+        
 }

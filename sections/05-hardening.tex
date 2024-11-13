@@ -80,14 +80,14 @@ sed -i_$(date +"%s").bak '
                 # Append the current security modules and add 'apparmor'
                 s/$/ lsm='$(awk -F ',' '{
                         for (i = 1; i < NF; i++) {
-                                if ($i !~ /^(landlock|yama|apparmor)$/)
+                                if ($i !~ /^(landlock|lockdown|yama|integrity|apparmor|bpf)$/)
                                         printf("%s,", $i)
                         }
-                }' /sys/kernel/security/lsm)'landlock,yama,apparmor/
+                }' /sys/kernel/security/lsm)'landlock,lockdown,yama,integrity,apparmor,bpf/
         }
 ' /boot/extlinux.conf
 
-lockdown,capability,landlock,yama
+# lockdown,capability,landlock,yama
 # Update the extlinux bootloader configuration
 update-extlinux 
 
