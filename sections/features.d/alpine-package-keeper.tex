@@ -78,10 +78,10 @@
         \smallskip
         \phantomsection{}
         \label{apk add}
-        \begin{posnexItemize}
-            \item[\sA] \sE{--no-cache}: The option fetches the latest package information from the repositories and does not store the package index (metadata) locally.
-            \item[\sA] \sE{--update-cache or -U}: This flag forces a cache update before installing the package.
-            \item[\sA] \sE{--virtual or -t}: This flag allows you to create a virtual package that groups multiple packages together.
+        \begin{posnexItemize}            
+            \item[\sA] \fDU{--no-cache and --update-cache}{--no-cache}: The option fetches the latest package information from the repositories and does not store the package index (metadata) locally.
+            \item[\sA] \fDU{--no-cache and --update-cache}{--update-cache or -U}: This flag forces a cache update before installing the package.
+            \item[\sA] \fDU{--virtual}{--virtual or -t}: This flag allows you to create a virtual package that groups multiple packages together.
             \item[\sA] \sE{--interactive or -i}: This flag prompts for confirmation before installing packages.
             \item[\sA] \sE{--repository or -X}: This flag specifies an additional repository to use for the package installation.
             \item[\sA] \sE{--force or -f}: This flag forces the installation of a package even if it would replace another package.
@@ -96,18 +96,47 @@
 \end{baseBoxThree}
 
 \begin{baseBoxThree}{\fU{Alpine Package Keeper}}{dark}
-    \begin{baseBoxThree}{\fUD{apk add}{--no-cache}}{dark}
+    \phantomsection{}
+    \label{--no-cache and --update-cache}
+    \begin{baseBoxThree}{\fUD{apk add}{--no-cache and --update-cache}}{dark}
         \begin{posnex}
+# Remove any existing APKINDEX files in the cache directory
+rm -f /var/cache/apk/APKINDEX.*
+
+# Install the man-db package without caching the packages locally
+apk add --no-cache man-db
+
+# List the contents of the cache directory to verify the presence/absence of files
+ls /var/cache/apk/
+
+# Update the APK cache, which downloads the APKINDEX files
+apk add --update-cache
+
+# List the contents of the cache directory again to see the newly downloaded APKINDEX files
+ls /var/cache/apk/
         \end{posnex}
         \smallskip
     \end{baseBoxThree}
     \smallskip
-\end{baseBoxThree}
-
-\begin{baseBoxThree}{\fU{Alpine Package Keeper}}{dark}
-    \smallskip
-    \begin{baseBoxThree}{\fUD{apk add}{}}{dark}
+    \phantomsection{}
+    \label{--virtual}
+    \begin{baseBoxThree}{\fUD{apk add}{--virtual}}{dark}
         \begin{posnex}
+# Install mawk, mawk documentation, dash, dash documentation, and dash-binsh packages
+apk add mawk mawk-doc dash dash-doc dash-binsh \
+    --virtual fastfastfast  # Group these packages under the virtual package name 'fastfastfast'
+
+# Display the dependencies of the 'fastfastfast' virtual package
+apk info -R fastfastfast
+
+# List all installed packages and highlight the virtual ones
+apk info -vv | grep 'virt'
+
+# Attempt to remove the 'dash' and 'mawk' packages (this will fail because they are part of 'fastfastfast')
+apk del dash mawk
+
+# Remove the 'fastfastfast' virtual package along with its dependencies
+apk del fastfastfast
         \end{posnex}
     \end{baseBoxThree}
     \smallskip
@@ -141,7 +170,8 @@ apk -iq search man
     \smallskip
 \end{baseBoxThree}
 
-% \begin{baseBoxThree}{}{dark}
+% \begin{baseBoxThree}{}{dark}\label{Security}
+
 %     \smallskip
 %     \begin{posnexItemize}
 %         \item[\sA] \sE{}:
