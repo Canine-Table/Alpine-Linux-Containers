@@ -1,0 +1,19 @@
+cat > dockerfile << 'EOF'
+# Start with the Alpine base image
+FROM alpine:latest
+
+# Copy the shell script into the container
+COPY script.sh /tmp/script.sh
+
+# Run the script and delete it afterwards
+RUN chmod +x /tmp/script.sh && /tmp/script.sh && rm /tmp/script.sh
+
+# Expose port 3306 for mariadb
+EXPOSE 3306
+
+# Use tini to handle process reaping and signal forwarding
+ENTRYPOINT ["/sbin/tini", "--"]
+
+# Start mysqld
+CMD ["mysqld_safe", "--user=mysql"]
+EOF
