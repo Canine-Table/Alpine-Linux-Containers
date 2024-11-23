@@ -17,49 +17,51 @@ chain ip6_protocols {
 }
 
 chain ip6_udp_packets {
-        counter;
-        iifname $ETH_DEV udp sport 546 udp dport 547 ip6 daddr ff02:0000:0000:0000:0000:0000:0001:0002 ip6 saddr fe80:0000:0000:0000:6038:e0ff:fec7:ba40 accept;
-        iifname $ETH_DEV udp sport 123 ip6 saddr @ip6-ntp-servers accept;
-        iifname $ETH_DEV ip6 daddr ff02::1 ip6 saddr $LL_SERVERS udp dport { 546, 547 } udp sport { 546, 547 } accept;
-        iifname $ETH_DEV udp dport { 137, 138 } udp sport { 137, 138 } drop;
+        counter
+        iifname $ETH_DEV udp sport 546 udp dport 547 ip6 daddr ff02::1:2 ip6 saddr $LL_SERVERS accept
+        iifname $ETH_DEV udp sport 123 ip6 saddr @ip6-ntp-servers accept
+        iifname $ETH_DEV ip6 daddr ff02::1 ip6 saddr $LL_SERVERS udp dport { 546, 547 } udp sport { 546, 547 } accept
+        iifname $ETH_DEV udp dport { 137, 138 } udp sport { 137, 138 } drop
 }
 
 chain ip6_tcp_packets {
         counter
-        oifname $ETH_DEV ip6 saddr $IP6_HOST tcp sport 2222 ip6 daddr $IP6_NET counter accept;
-        iifname $ETH_DEV ip6 saddr $IP6_NET tcp dport 2222 ip6 daddr $IP6_HOST counter accept;
+        oifname $ETH_DEV ip6 saddr $IP6_HOST tcp sport 2222 ip6 daddr $IP6_NET counter accept
+        iifname $ETH_DEV ip6 saddr $IP6_NET tcp dport 2222 ip6 daddr $IP6_HOST counter accept
 }
 
 chain ip6_icmp_packets {
-        counter;
+        counter
+        iifname $ETH_DEV ether saddr $ETHER_SERVERS ether daddr $ETHER_SERVERS counter accept
+        oifname $ETH_DEV ether daddr $ETHER_SERVERS ether saddr $ETHER_SERVERS counter accept
 }
 
 chain ip6_no_next_header_packets {
-        counter;
+        counter
 }
 
 chain ip6_hop_by_hop_packets {
-        counter;
+        counter
 }
 
 chain ip6_esp_packets {
-        counter;
+        counter
 }
 
 chain ip6_ah_packets {
-        counter;
+        counter
 }
 
 chain ip6_fragment_packets {
-        counter;
+        counter
 }
 
 chain ip6_routing_packets {
-        counter;
+        counter
 }
 
 chain ip6_destination_options_packets {
-        counter;
+        counter
 }
 
 EOS

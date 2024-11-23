@@ -6,23 +6,28 @@ cat > /etc/nftables.nft << 'EOS'
 flush ruleset
 
 # Definitions
-define ETH_DEV = intel;
-define IP_HOST = 172.31.0.113;
-define IP6_HOST = dead:deaf:beef::1803:7334:16d7;
-define LL_HOST = fe80::1a03:73ff:fe34:16d7;
-define IP6_NET = dead:deaf:beef::/64;
-define IP_NET = {172.31.0.0/16, 10.0.0.0/8 };
+define ETH_DEV = intel
+define IP_HOST = 172.31.0.113
+define IP6_HOST = dead:deaf:beef::1803:7334:16d7
+define LL_HOST = fe80::1a03:73ff:fe34:16d7
+define ETHER_HOST = 18:03:73:34:16:d7
+define IP6_NET = dead:deaf:beef::/64
+define IP_NET = {172.31.0.0/16, 10.0.0.0/8 }
 define IP_SERVERS = {
     172.31.0.1,
     172.31.0.112,
     172.31.0.113,
-    10.0.0.1
 }
-
 define LL_SERVERS = {
     fe80::1a03:73ff:fe34:16d7,
     fe80::a184:8db1:383c:565e,
     fe80::6238:e0ff:fec7:ba40
+}
+define ETHER_SERVERS = {
+    60:38:e0:c7:ba:40,
+    62:38:e0:c7:ba:40,
+    18:03:73:34:16:d7,
+    b2:9e:0b:29:2f:34
 }
 
 # The state of stateful objects saved on the nftables service stop.
