@@ -1,0 +1,47 @@
+mkdir -p /etc/nftables.d/inet
+cat > /etc/nftables.d/inet/filter.nft << 'EOS'
+
+table inet filter {
+
+        include "/etc/nftables.d/common/packets.nft"
+
+        chain INPUT {
+                type filter hook input priority 0; policy drop;
+
+                ct state vmap {
+                        established : jump established_packets,
+                        related : jump related_packets,
+                        invalid : jump invalid_packets,
+                        new : jump new_packets
+                }
+
+                jump ip_protocols
+                jump ip6_protocols
+
+                iifname $ETH_DEV ip saddr $IP_SERVERS ip daddr 224.0.0.1 accept;
+
+                log flags all prefix "[DEBUG]: inet INPUT chain of the filter table was dropped:" level debug counter;
+        }
+
+        chain FORWARD {
+                type filter hook forward priority 0; policy drop;
+
+                jump ip_protocols
+                jump ip6_protocols
+
+                log prefix "[DEBUG]: inet FORWARD chain of the filter table was dropped:" level debug counter;
+        }
+
+        chain OUTPUT {
+                type filter hook output priority 0; policy accept;
+
+                jump ip_protocols
+                jump ip6_protocols
+
+                oifname $ETH_DEV udp dport { 137, 138 } udp sport { 137, 138 } drop;
+                log prefix "[DEBUG]: inet OUTPUT chain of the filter table was accepted:" level debug counter;
+        }
+}
+
+EOS
+nft -f /etc/nftables.nft

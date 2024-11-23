@@ -1,0 +1,47 @@
+mkdir -p /etc/nftables.d/inet
+cat > /etc/nftables.d/inet/nat.nft << 'EOS'
+
+table inet nat {
+        include "/etc/nftables.d/common/packets.nft"
+
+        chain PREROUTING {
+                type nat hook prerouting priority -100; policy accept;
+
+                jump ip_protocols
+                jump ip6_protocols
+
+                log prefix "[DEBUG]: inet PREROUTING chain of the nat table was accepted:" level debug counter;
+        }
+
+        chain OUTPUT {
+                type nat hook output priority 0; policy accept;
+
+                jump ip_protocols
+                jump ip6_protocols
+
+                log prefix "[DEBUG]: inet OUTPUT chain of the nat table was accepted:" level debug counter;
+        }
+
+        chain INPUT {
+                type nat hook input priority 0; policy accept;
+
+                jump ip_protocols
+                jump ip6_protocols
+
+                log prefix "[DEBUG]: inet INPUT chain of the nat table was accepted:" level debug counter;
+        }
+
+        chain POSTROUTING {
+                type nat hook postrouting priority 100; policy accept;
+
+                jump ip_protocols
+                jump ip6_protocols
+
+                meta oifname "intel" masquerade;
+
+                log prefix "[DEBUG]: inet POSTROUTING chain of the nat table was accepted:" level debug counter;
+        }
+}
+
+EOS
+nft -f /etc/nftables.nft

@@ -1,0 +1,31 @@
+mkdir -p /etc/nftables.d/common
+cat > /etc/nftables.d/common/packets.nft << 'EOS'
+
+include "/etc/nftables.d/ip/packets.nft"
+include "/etc/nftables.d/ip/maps.nft"
+
+include "/etc/nftables.d/ip6/packets.nft"
+
+include "/etc/nftables.d/common/logger.nft"
+
+chain invalid_packets {
+        counter; drop;
+}
+
+chain established_packets {
+        counter; accept;
+}
+
+chain related_packets {
+        counter;
+}
+
+chain new_packets {
+        counter;
+}
+
+chain filter_INPUT_excessive_connections {
+        log prefix "[WARN]: inet INPUT chain of the filter table was recived excessive connection from:" level warn counter reject;
+}
+
+EOS

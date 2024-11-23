@@ -1,0 +1,19 @@
+# /etc/profile
+
+d=/etc/profile.d
+[ -d "$d" -a -r "$d" -a -x "$d" ] && for s in "$d/"*".sh"; do
+        [ -r "$s" ] && . "$s"
+done
+unset s d PATH
+
+append_path "$HOME"/.local/sbin
+append_path "$HOME"/.local/bin
+append_path /usr/local/bin
+append_path /usr/local/sbin
+append_path /usr/local/bin
+append_path /usr/sbin
+append_path /usr/bin
+append_path /sbin
+append_path /bin
+
+umask 022

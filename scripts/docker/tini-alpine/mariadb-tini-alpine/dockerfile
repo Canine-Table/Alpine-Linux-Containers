@@ -1,19 +1,21 @@
-cat > dockerfile << 'EOS'
+cat > dockerfile << 'EOF'
+
 # Start with the Alpine base image
 FROM alpine:latest
 
-# Copy the shell script into the container
+# COPY ${HOME}/.config/ssl/lab/lab.d/mariadb.home.lab /root
 COPY script.sh /tmp/script.sh
+COPY ssl.tbz /etc/ssl/ssl.tbz
 
 # Run the script and delete it afterwards
 RUN chmod +x /tmp/script.sh && /tmp/script.sh && rm /tmp/script.sh
 
-# Expose port 53 for dnsmasq
-EXPOSE 53
+# Expose port 3306 for mariadb
+EXPOSE 3306/tcp
 
 # Use tini to handle process reaping and signal forwarding
 ENTRYPOINT ["/sbin/tini", "--"]
 
-# Start named CMD ["named", "-g"]
-CMD ["named", "-g"]
-EOS
+# Start mysqld
+CMD ["mysqld_safe", "--user=mysql", "--datadir=/var/lib/mysql"]
+EOF

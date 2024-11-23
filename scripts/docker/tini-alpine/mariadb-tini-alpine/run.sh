@@ -1,3 +1,6 @@
+# Create and run the deployment script
+cat > run.sh << 'EOS'
+
 docker build -t alpine:mariadb .
 
 ( # Remove old deployments
@@ -7,8 +10,6 @@ docker build -t alpine:mariadb .
     done
 )
 
-# Create and run the deployment script
-cat > run.sh << 'EOF'
 (
         CONTAINER_ID="$(
                 UNIQUE="$(cat /dev/urandom | tr -dc [:alnum:] | head -c 16)"
@@ -18,20 +19,14 @@ cat > run.sh << 'EOF'
                     --label "mariadb=${UNIQUE}" \
                     --hostname mariadb.home.lab \
                     --restart unless-stopped \
-                    --publish 3306:3306 \
+                    --publish 127.0.0.1:3306:3306/tcp \
+                    --publish ::1:3306:3306/tcp \
                     alpine:mariadb
         )" || echo "Failed to create container" && {
-                docker container exec --interactive --tty "$CONTAINER_ID" ash -c '
-                        {
-                            rm -f /tmp/deploy.sql
-                            apk del --purge mariadb-client
-                        } || echo "An error occurred D:"
-                ' 
+                docker container exec --interactive --tty "$CONTAINER_ID" ash
         }
 )
-EOF
-
-mariadb -u root -e /tmp/deploy.sql
+EOS
 
 chmod +x run.sh
 ./run.sh

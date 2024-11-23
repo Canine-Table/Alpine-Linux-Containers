@@ -1,0 +1,13 @@
+mkdir -p /etc/nftables.d/ip
+cat > /etc/nftables.d/ip/maps.nft << 'EOS'
+
+map ip-service-new {
+        type inet_proto . inet_service : verdict
+
+        elements = {
+            tcp . 2222 :  accept,
+            tcp . 3306 : accept
+        }
+}
+
+EOS

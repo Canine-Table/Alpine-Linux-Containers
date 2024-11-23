@@ -1,0 +1,8 @@
+mkdir -p /etc/nftables.d/common
+cat > /etc/nftables.d/common/logger.nft << 'EOS'
+
+chain excessive_connections {
+        log prefix "[WARN]: recived excessive connection from:" level warn counter reject;
+}
+
+EOS

@@ -1,3 +1,6 @@
+# Create and run the deployment script
+cat > run.sh << 'EOS'
+
 docker build -t alpine:bind .
 
 (
@@ -7,7 +10,6 @@ docker build -t alpine:bind .
     done
 )
 
-cat > run.sh << 'EOF'
 (
         CONTAINER_ID="$(
             UNIQUE="$(cat /dev/urandom | tr -dc [:alnum:] | head -c 16)"
@@ -17,11 +19,18 @@ cat > run.sh << 'EOF'
                 --label ${UNIQUE} \
                 --hostname bind.home.lab \
                 --restart unless-stopped \
-                --publish 53:53 \
+                --publish 127.0.0.1:8053:53/udp \
+                --publish 127.0.0.1:8053:53/tcp \
+                --publish 127.0.0.1:8953:953/tcp \
+                --publish ::1:8053:53/udp \
+                --publish ::1:8053:53/tcp \
+                --publish ::1:8953:953/tcp \
                 alpine:bind
         )" && {
             docker container exec --interactive --tty ${CONTAINER_ID} ash
         }
 )
-EOF
+EOS
+
+chmod +x run.sh
 ./run.sh

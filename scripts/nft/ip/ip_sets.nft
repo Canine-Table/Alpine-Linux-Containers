@@ -1,0 +1,16 @@
+mkdir -p /etc/nftables.d/ip
+cat > /etc/nftables.d/ip/sets.nft << 'EOS'
+include "/etc/nftables.d/ip/ntp.nft"
+EOS
+
+#dig +short pool.ntp.org; done | awk '{ unique[$0] = 1; } END { for (i in unique) { print i } }'
+
+# 2024-11-22 19:28:35 debug kernel: [DEBUG]: inet OUTPUT chain of the 
+# filter table was accepted:IN= OUT= SRC=172.31.0.113 DST=10.0.0.1 LEN=81 TOS=0x00 PREC=0x00 TTL=64 ID=38341 PROTO=UDP SPT=53808 DPT=53 LEN=61 
+# 2024-11-22 19:28:40 debug kernel: [DEBUG]: inet OUTPUT chain of the nat table was accepted:IN= OUT=intel SRC=172.31.0.113 DST=10.0.0.1 LEN=81 TOS=0x00 PREC=0x00 TTL=64 ID=37362 PROTO=UDP SPT=49907 DPT=53 LEN=61 
+# 2024-11-22 19:28:40 debug kernel: [DEBUG]: inet OUTPUT chain of the filter table was accepted:IN= OUT=intel SRC=172.31.0.113 DST=10.0.0.1 LEN=81 TOS=0x00 PREC=0x00 TTL=64 ID=37362 PROTO=UDP SPT=49907 DPT=53 LEN=61 
+# 2024-11-22 19:28:45 debug kernel: [DEBUG]: inet OUTPUT chain of the nat table was accepted:IN= OUT=intel SRC=172.31.0.113 DST=10.0.0.1 LEN=81 TOS=0x00 PREC=0x00 TTL=64 ID=30910 PROTO=UDP SPT=41479 DPT=53 LEN=61 
+# 2024-11-22 19:28:45 debug kernel: [DEBUG]: inet OUTPUT chain of the filter table was accepted:IN= OUT=intel SRC=172.31.0.113 DST=10.0.0.1 LEN=81 TOS=0x00 PREC=0x00 TTL=64 ID=30910 PROTO=UDP SPT=41479 DPT=53 LEN=61 
+# 2024-11-22 19:28:45 debug kernel: [DEBUG]: inet OUTPUT chain of the nat table was accepted:IN= 
+oifname $ETH_DEV udp daddr $IP_SERVERS udp daddr $IP_HOST 
+OUT=intel SRC=172.31.0.113 DST=10.0.0.1 LEN=81 TOS=0x00 PREC=0x00 TTL=64 ID=30910 PROTO=UDP SPT=41479 DPT=53 LEN=61 

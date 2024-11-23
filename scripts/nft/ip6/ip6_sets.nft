@@ -1,0 +1,4 @@
+mkdir -p /etc/nftables.d/ip6
+cat > /etc/nftables.d/ip6/sets.nft << 'EOS'
+include "/etc/nftables.d/ip6/ntp.nft"
+EOS

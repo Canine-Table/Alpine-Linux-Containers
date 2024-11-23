@@ -1,0 +1,58 @@
+e
+append_path() {
+        case ":$PATH:" in
+                *:"$1":*) return 1;;
+                *) export PATH="${PATH:+$PATH:}$1";;
+        esac
+
+        return 0
+}
+
+profile() {
+        append_path /usr/local/sbin
+        append_path /usr/local/bin
+        append_path /usr/sbin
+        append_path /usr/bin
+        append_path /sbin
+        append_path /bin
+
+        umask 022
+        export PAGER=$(
+                for c in less more tee; do
+                        command -v $c && exit; 
+                done
+        ) || unset PAGER
+
+        export EDITOR=$(
+                for c in nvim vim vi; do
+                        command -v $c && exit; 
+                done
+        ) || unset EDITOR
+
+        export PS1="$(
+            echo '\H:[\u:[\w]]'
+            [ "$(id -u)" -eq 0 ] && echo '# ' || echo '$ '
+        )"
+
+        (
+                d=/etc/profile.d
+                [ -d "$d" -a -r "$d" -a -x "$d" ] && for s in "$d/"*".sh"; do
+                   [ -r "$s" ] && . "$s"
+                done
+        )
+}
+
+profile
+alias su='doas su -l'
+
+alias l=ls
+alias la='ls -a'
+alias l1='ls -a1'
+alias ll='ls -al'
+alias lA='ls -Al'
+
+alias cls=clear
+
+[ -n "$EDITOR" ] && alias vi="$EDITOR"
+
+alpine.home.lab:[sandbox:[~]]

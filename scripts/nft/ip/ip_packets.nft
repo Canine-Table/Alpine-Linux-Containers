@@ -1,0 +1,37 @@
+mkdir -p /etc/nftables.d/ip
+cat > /etc/nftables.d/ip/packets.nft << 'EOS'
+
+include "/etc/nftables.d/ip/sets.nft";
+
+chain ip_protocols {
+        ip protocol vmap {
+                tcp : jump ip_tcp_packets,
+                udp : jump ip_udp_packets,
+                icmp : jump ip_icmp_packets
+        }
+}
+
+chain ip_icmp_packets {
+        counter
+        iifname $ETH_DEV ip saddr $IP_SERVERS ip daddr $IP_SERVERS counter accept;
+        oifname $ETH_DEV ip daddr $IP_SERVERS ip daddr $IP_SERVERS counter accept;
+}
+
+chain ip_tcp_packets {
+        counter
+        oifname $ETH_DEV ip saddr $IP_HOST tcp sport 2222 ip daddr $IP_NET counter accept;
+        iifname $ETH_DEV ip saddr $IP_NET tcp dport 2222 ip daddr $IP_HOST counter accept;
+}
+
+chain ip_udp_packets {
+        counter
+        iifname $ETH_DEV udp sport 123 ip saddr @ip-ntp-servers accept;
+        oifname $ETH_DEV ip saddr $IP_HOST ip daddr $IP_SERVERS udp dport 53 accept;
+        iifname $ETH_DEV ip daddr $IP_HOST ip saddr $IP_SERVERS udp sport 53 accept;
+        iifname $ETH_DEV udp dport { 137, 138 } udp sport { 137, 138 } drop;
+        iifname $ETH_DEV ip protocol udp ip daddr 172.31.255.255 drop
+}
+
+EOS
+
+

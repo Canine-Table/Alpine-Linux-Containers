@@ -1,3 +1,5 @@
+#!/bin/sh
+
 mkdir -p /home/sandbox/.config/docker/
 cat > /home/sandbox/.config/docker/daemon.conf << 'EOS'
 {

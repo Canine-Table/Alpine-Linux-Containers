@@ -125,15 +125,20 @@ options {
     directory "/var/bind";
 
     listen-on port 53 {
-        localhost;
+        172.16.0.3;
+    };
+
+    listen-on-v6 port 53 {
+        dead:deaf:beef:acad::3;
     };
 
     forwarders {
         192.168.1.1;
+        127.0.0.11;
     };
 
     allow-update {
-        none;
+       any;
     };
 
     allow-query {
@@ -156,12 +161,12 @@ options {
     dnssec-validation yes;
     auth-nxdomain no;
 };
+
+controls { 
+    inet 172.16.0.3 port 953 allow { 172.16.0.0/16; 127.0.0.1; }; 
+    inet dead:deaf:beef:acad::3 port 953 allow { dead:deaf:beef:acad::/64; ::1/128; }; 
+};
 EOF
-
-
-
-
-
 
 
 

@@ -1,0 +1,9 @@
+export HOME="$(cd ~ && pwd)"
+export USER="$(whoami)"
+export GROUPS="$(groups "$USER")"
+
+eval "$(
+        for p in "$HOME"/.profile /etc/profile; do
+                [ -f "$p" -a -r "$p" ] && cat "$p"
+        done
+)"
